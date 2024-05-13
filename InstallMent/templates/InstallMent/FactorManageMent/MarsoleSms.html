@@ -1,0 +1,262 @@
+{% extends 'Ib7Base.html' %}
+
+{% block content %}
+{% load static %}
+
+
+<input type="hidden" id="request_cloth_list_url" value="{% url 'instalment_app:PostSmsManageMent' %}">
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <!-- Layout Demo -->
+    <br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style2 mb-0">
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">خانه</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">لیست سفارشات ارسال شده</a>
+            </li>
+
+        </ol>
+    </nav>
+    <br>
+
+
+    <div class="card">
+
+        <div class="card-header ">
+            <h5 style="float:right;">لیست سفارشات ارسال شده</h5>
+
+            <button type="button" class="btn rounded-pill btn-secondary" style="float:left;" data-bs-toggle="modal"
+                data-bs-target="#modalCenter">
+                ایجاد مورد جدید
+                <i class='bx bx-cut'></i>
+            </button>
+        </div>
+
+        <div class="card-datatable text-nowrap">
+            <table class="dt-scrollableTable table table-bordered">
+                <thead>
+                    <tr>
+                        <th>شناسه</th>
+                        <th>نام</th>
+                        <th>نام خانوادگی</th>
+                        <th>کد مرسوله</th>
+                        <th>تاریخ</th>
+
+
+
+                        <th>عمل</th>
+                        <th>عمل</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title secondary-font" id="modalCenterTitle">عنوان مودال</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="CreatePostSmsForm" action="{% url 'instalment_app:PostSmsManageMent' %}">
+                    <div class="modal-body">
+                        <div class="row">
+
+                        </div>
+                        <div class="row g-2">
+                            <div class="col mb-0">
+                                <label for="emailWithTitle" class="form-label">نام</label>
+                                <input type="text" id="emailWithTitle" name="firstname" class="form-control"
+                                    placeholder="نام">
+                            </div>
+                            <div class="col mb-0">
+                                <label for="dobWithTitle" class="form-label">نام خانوادگی</label>
+                                <input type="text" id="dobWithTitle" name="lastname" class="form-control"
+                                    placeholder="نام خانوادگی">
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col mb-0">
+                                <label for="emailWithTitle" class="form-label">کد مرسوله</label>
+                                <input type="text" id="emailWithTitle" name="marsole_code" class="form-control"
+                                    placeholder="کذ مرسوله">
+                            </div>
+                            <div class="col mb-0">
+                                <label for="dobWithTitle" class="form-label">شماره تلفن</label>
+                                <input type="text" id="dobWithTitle" name="phone_number" class="form-control"
+                                    placeholder="09XXXXXXXX">
+                            </div>
+
+                        </div>
+                        <div class="row g-2">
+                            <div class="col mb-0">
+                                <label for="dobWithTitle" class="form-label">روش ارسال</label>
+                                <select name="post_type" id="" class="form-select">
+
+                                    <option value="پست">پست</option>
+                                    <option value="باربری">باربری</option>
+                                    <option value="تبپاکس">تبپاکس</option>
+                                </select>
+                            </div>
+                            <div class="col mb-0">
+                                <label for="dobWithTitle" class="form-label">سفارش</label>
+                                <select name="factor_id" id="" class="select2 form-select">
+                                    {% for factor in factors  %}
+                                      
+                                    <option value="{{factor.id}}">کد:{{factor.order_code}} به نام :{{factor.costumer.firstname}} {{factor.costumer.lastname}}  </option>
+                                    {% endfor %}
+                                    
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                بستن
+                            </button>
+
+                            <button type="submit" id="CreatePostSmsBtn" class="btn btn-primary">ذخیره تغییرات</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!--/ Layout Demo -->
+</div>
+{% for query in queryset %}
+<div class="modal fade" id="basicModal_{{query.id}}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title secondary-font" id="exampleModalLabel1">عنوان مودال</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'instalment_app:PostSmsManageMent' query.id %}" id="EditPostSmsForm_{{query.id}}">
+                    <div class="row g-2">
+                        <div class="col mb-0">
+                            <label for="emailBasic" class="form-label">نام </label>
+                            <input type="text" id="emailWithTitle" value="{{query.firstname}}" name="firstname"
+                                class="form-control" placeholder="نام">
+                        </div>
+                        <div class="col mb-0">
+                            <label for="dobBasic" class="form-label">نام خانوادگی</label>
+                            <input type="text" id="dobWithTitle" value="{{query.lastname}}" name="lastname"
+                                class="form-control" placeholder="نام خانوادگی">
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col mb-0">
+                            <label for="emailBasic" class="form-label">کد مرسوله </label>
+                            <input type="text" id="emailWithTitle" value="{{query.marsole_code}}" name="marsole_code"
+                                class="form-control" placeholder="کذ مرسوله">
+                        </div>
+                        <div class="col mb-0">
+                            <label for="dobBasic" class="form-label">شماره تلفن</label>
+                            <input type="text" id="dobWithTitle" name="phone_number" value="{{query.phone_number}}"
+                                class="form-control" placeholder="09XXXXXXXX">
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col mb-0">
+                            <label for="dobWithTitle" class="form-label">روش ارسال</label>
+                            <select name="post_type" id="" class="form-select">
+                                {% if query.post_type == "پست" %}
+
+                                <option value="پست" selected>پست</option>
+                                {% else %}
+                                <option value="پست">پست</option>
+
+                                {% endif %}
+                                {% if query.post_type == "باربری" %}
+
+                                <option value="باربری" selected>باربری</option>
+                                {% else %}
+                                <option value="باربری">باربری</option>
+
+                                {% endif %}
+                                {% if query.post_type == "تبپاکس" %}
+
+                                <option value="تبپاکس" selected>تبپاکس</option>
+                                {% else %}
+                                <option value="تبپاکس">تبپاکس</option>
+
+                                {% endif %}
+
+
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                    بستن
+                </button>
+                <button type="button" class="btn btn-primary" onclick="EditPostSms({{query.id}})"
+                    id="EditPostSmsBtn_{{query.id}}">ذخیره تغییرات</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock content %}
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+{% endblock css %}
+{% block page_js %}
+{% load static %}
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ProductiveJs/InstallMantManageMent/FactorManageMent/PostSmsList.js' %}"></script>
+<!-- page js -->
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+{% endblock page_js %}
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendors %}

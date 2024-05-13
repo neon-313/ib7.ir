@@ -1,0 +1,175 @@
+{% extends 'Ib7Base.html' %}
+{% block content %}
+<input type="hidden" id="InventoryManagerUrl" value="{% url 'ShopManageMentUrl:InventoryManager' %}">
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Layout Demo -->
+    <br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style2 mb-0">
+            <li class="breadcrumb-item">
+                <a href="{% url 'HomePageUrl:HomePage' %}">خانه</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">مدیریت محصولات</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">موجودی محصولات</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">لیست  موجودی محصولات</a>
+            </li>
+
+        </ol>
+    </nav>
+    <br>
+    <div class="card">
+        <div class="modal fade" id="CreateSizeModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title secondary-font" id="modalCenterTitle">ایجاد سایز جدید</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{% url 'ShopManageMentUrl:SizeManager' %}" id="CreateSizeForm">
+                        <div class="modal-body">
+                            <div class="row">
+                                {% csrf_token %}
+                                <div class="col mb-3">
+                                    <label for="nameWithTitle" class="form-label"> عنوان سایز</label>
+                                    <input type="text" name="size_name" id="nameWithTitle" class="form-control"
+                                        placeholder="نام را وارد کنید" required>
+                                </div>
+                            </div>
+                           
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                بستن
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="CreateSizeBtn">ذخیره تغییرات</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-header ">
+            <h5 style="float:right;">لیست  موجودی محصولات</h5>
+            <!-- <button type="button" class="btn rounded-pill btn-secondary" data-bs-toggle="modal"
+                data-bs-target="#CreateSizeModal" style="float:left;">ایجاد مورد جدید <i
+                    class='bx bx-user-plus bx-tada'></i></button> -->
+        </div>
+
+        <div class="card-datatable text-nowrap">
+            <table class="dt-scrollableTable table table-bordered">
+                <thead>
+                    <tr>
+                        <th>شناسه</th>
+                        <th>عنوان</th>
+                        <th>کد محصول</th>
+                        <th>موجودی فعلی</th>
+
+                        
+
+                        <th>عمل</th>
+
+
+
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    {% for size in sizes %}
+    <div class="modal fade" id="EditSizeModal_{{size.id}}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title secondary-font" id="modalCenterTitle">ایجاد تغییر در دسته بندی</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'ShopManageMentUrl:SizeManager' size.id %}"
+                    id="EditSizeForm_{{size.id}}">
+                    <div class="modal-body">
+                        <div class="row">
+                            {% csrf_token %}
+                            <div class="col mb-3">
+                                <label for="nameWithTitle" class="form-label"> عنوان سایز</label>
+                                <input type="text" name="size_name" id="nameWithTitle" class="form-control"
+                                    placeholder="نام را وارد کنید" required value="{{size.name}}">
+                            </div>
+                        </div>
+                  
+
+                    </div>
+                    {% csrf_token %}
+         
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                            بستن
+                        </button>
+                        <button type="button" class="btn btn-primary" id="EditSizeBtn_{{size.id}}"
+                            onclick="EditSize({{size.id}})">ذخیره تغییرات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <!--/ Layout Demo -->
+</div>
+{% endblock content %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">SizeList
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+{% endblock css %}
+{% block page_js %}
+{% load static %}
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ShopJs/ShopManageMent/InventoryManager/InventoryList.js' %}"></script>
+<!-- page js -->
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+{% endblock page_js %}
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendors %}

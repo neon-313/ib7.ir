@@ -1,0 +1,192 @@
+{% extends 'Ib7Base.html' %}
+{% block content %}
+<input type="hidden" id="InventoryManagerUrl" value="{% url 'ShopManageMentUrl:InventoryManager' %}">
+<input type="hidden" id="InventoryManagerUrl_id" value="{% url 'ShopManageMentUrl:InventoryManager' product.id %}">
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Layout Demo -->
+    <br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style2 mb-0">
+            <li class="breadcrumb-item">
+                <a href="{% url 'HomePageUrl:HomePage' %}">خانه</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">مدیریت محصولات</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">موجودی محصولات</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'ShopManageMentUrl:InventoryList' %}">لیست  موجودی محصولات</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">ثبت موجودی {{product.title}}</a>
+            </li>
+        </ol>
+    </nav>
+    <br>
+    <div id="csrf_div">
+      {% csrf_token %}
+    </div>
+    <div class="card">
+        <div class="card-header sticky-element bg-label-secondary d-flex justify-content-sm-between align-items-sm-center flex-column flex-sm-row">
+            <h5 class="card-title mb-sm-0 me-2">عنوان محصول :{{product.title}}  کد محصول:{{product.product_code}}</h5>
+            <div class="action-btns">
+              <a  href="{% url 'ShopManageMentUrl:InventoryList' %}"  class="btn btn-label-primary me-3">
+                <span class="align-middle"> بازگشت</span>
+              </a>
+              <button type="button" id="CreateInventory" class="btn btn-primary">ثبت موجودی</button>
+            </div>
+          </div>
+        <div class="table-responsive text-nowrap">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>رنگ</th>
+                {% for size in sizes %}
+                <th>{{size.name}}</th>
+                {% endfor %}
+           
+              </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+            {% for color in data %}
+              {% if color.check %}
+              
+            
+                <tr>
+                  <td>
+                      <label class="me-3 switch switch-primary">
+                          <input type="checkbox" class="switch-input" name="colors" checked value="{{color.id}}"  id="color_{{color.id}}" onclick="ClickColor(this,{{color.id}})">
+                          <span class="switch-toggle-slider">
+                            <span class="switch-on">
+                              <i class="bx bx-check"></i>
+                            </span>
+                            <span class="switch-off">
+                              <i class="bx bx-x"></i>
+                            </span>
+                          </span>
+                          <span class="switch-label">{{color.color_name}}</span>
+                        </label>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" style="fill: {{color.color_code}};transform: ;msFilter:;"><path d="M20 14c-.092.064-2 2.083-2 3.5 0 1.494.949 2.448 2 2.5.906.044 2-.891 2-2.5 0-1.5-1.908-3.436-2-3.5zM9.586 20c.378.378.88.586 1.414.586s1.036-.208 1.414-.586l7-7-.707-.707L11 4.586 8.707 2.293 7.293 3.707 9.586 6 4 11.586c-.378.378-.586.88-.586 1.414s.208 1.036.586 1.414L9.586 20zM11 7.414 16.586 13H5.414L11 7.414z"></path></svg>
+                      
+                  </td>
+                  {% for size in color.sizes  %}
+                  {% if size.check %}
+                  <td>
+                    <div class="input-group">
+                        <div class="input-group-text">
+                          <input class="form-check-input mt-0" id="size_check_{{color.id}}" checked  type="checkbox" onclick="CheckSize(this,{{color.id}},{{size.id}})" value="{{size.id}}" aria-label="Checkbox for following text input">
+                        </div>
+                        <input type="number" class="form-control" value="{{size.count}}"  name="size_count_{{color.id}}"   id="size_count_{{color.id}}_{{size.id}}" aria-label="Text input with checkbox">
+                      </div>    
+                </td>
+                  {% else  %}
+                  <td>
+                    <div class="input-group">
+                        <div class="input-group-text">
+                          <input class="form-check-input mt-0" id="size_check_{{color.id}}"  disabled type="checkbox" onclick="CheckSize(this,{{color.id}},{{size.id}})" value="{{size.id}}" aria-label="Checkbox for following text input">
+                        </div>
+                        <input type="number" class="form-control" value="{{size.count}}"  name="size_count_{{color.id}}"  disabled id="size_count_{{color.id}}_{{size.id}}" aria-label="Text input with checkbox">
+                      </div>    
+                </td>
+                  {% endif %}
+          
+                  {% endfor %}
+        
+                </tr>
+              {% else %}
+              <tr>
+                <td>
+                    <label class="me-3 switch switch-primary">
+                        <input type="checkbox" class="switch-input" name="colors" value="{{color.id}}"  id="color_{{color.id}}" onclick="ClickColor(this,{{color.id}})">
+                        <span class="switch-toggle-slider">
+                          <span class="switch-on">
+                            <i class="bx bx-check"></i>
+                          </span>
+                          <span class="switch-off">
+                            <i class="bx bx-x"></i>
+                          </span>
+                        </span>
+                        <span class="switch-label">{{color.color_name}}</span>
+                      </label>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" style="fill: {{color.color_code}};transform: ;msFilter:;"><path d="M20 14c-.092.064-2 2.083-2 3.5 0 1.494.949 2.448 2 2.5.906.044 2-.891 2-2.5 0-1.5-1.908-3.436-2-3.5zM9.586 20c.378.378.88.586 1.414.586s1.036-.208 1.414-.586l7-7-.707-.707L11 4.586 8.707 2.293 7.293 3.707 9.586 6 4 11.586c-.378.378-.586.88-.586 1.414s.208 1.036.586 1.414L9.586 20zM11 7.414 16.586 13H5.414L11 7.414z"></path></svg>
+                    
+                </td>
+                {% for size in color.sizes  %}
+                <td>
+                    <div class="input-group">
+                        <div class="input-group-text">
+                          <input class="form-check-input mt-0" id="size_check_{{color.id}}"  disabled type="checkbox" onclick="CheckSize(this,{{color.id}},{{size.id}})" value="{{size.id}}" aria-label="Checkbox for following text input">
+                        </div>
+                        <input type="number" class="form-control" value="{{size.count}}"  name="size_count_{{color.id}}"  disabled id="size_count_{{color.id}}_{{size.id}}" aria-label="Text input with checkbox">
+                      </div>    
+                </td>
+                {% endfor %}
+      
+              </tr>
+              {% endif %}
+              {% endfor %}
+   
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    <!--/ Layout Demo -->
+</div>
+{% endblock content %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+{% endblock css %}
+{% block page_js %}
+{% load static %}
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ShopJs/ShopManageMent/InventoryManager/CreateOrEditInv.js' %}"></script>
+<!-- page js -->
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+{% endblock page_js %}
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendors %}

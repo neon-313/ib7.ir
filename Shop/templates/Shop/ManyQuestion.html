@@ -1,0 +1,111 @@
+{% extends 'ShopBaseNew.html' %}
+
+
+  
+{% block content %}
+{% load static %}
+<main class="flex-grow bg-secondary-light pb-14 pt-36 dark:bg-primary-dark xs:pt-36">
+  <div class="container rounded-lg bg-primary-light p-5 dark:bg-secondary-dark">
+    <div class="mb-8">
+      <div class="mb-5 flex">
+        <h1 class="relative select-none pb-2 text-lg text-quaternary-700 dark:text-primary-light md:text-xl">
+          سوالات متداول
+          <span
+            class="absolute bottom-0 right-0 h-0.5 w-full rounded-full bg-tertiary-500 dark:bg-tertiary-400"></span>
+        </h1>
+      </div>
+      <p class="mb-5 text-sm text-quaternary-600 dark:text-quaternary-300 xs:text-base">
+        سوال خود را پیدا نکردید ؟
+        <a href="#" class="text-tertiary-500 dark:text-tertiary-400">با ما تماس بگیرید</a>
+      </p>
+    </div>
+    <div class="mb-16 grid grid-cols-12 gap-y-8 md:gap-x-8">
+      <div class="col-span-12 md:col-span-4">
+        <div class="sticky top-32">
+          <p class="mb-4 text-sm text-quaternary-600 dark:text-quaternary-300">
+            سوال خود را جستجو کنید
+          </p>
+          <div class="flex items-center justify-between rounded-lg bg-secondary-light px-2 dark:bg-primary-dark">
+            <div>
+              <svg class="h-6 w-6 text-quaternary-700 dark:text-primary-light">
+                <use xlink:href="#search" />
+              </svg>
+            </div>
+            <label class="sr-only">search faq </label>
+            <input
+              class="flex grow rounded-lg border-none bg-secondary-light px-2 py-3 text-quaternary-700 outline-none placeholder:text-sm placeholder:text-quaternary-500 focus:ring-0 dark:bg-primary-dark dark:text-primary-light placeholder:dark:text-quaternary-400"
+              placeholder="دنبال چه سوالی میگردید ؟" type="text" />
+          </div>
+        </div>
+      </div>
+      <div class="col-span-12 space-y-8 md:col-span-8">
+        {% for title_question_obj in title_question_objs %}
+        <div>
+          <div class="mb-4 flex items-center gap-x-2">
+            <span class="h-2 w-2 rounded-full bg-tertiary-500 dark:bg-tertiary-400"></span>
+            <p class="text-lg font-medium text-quaternary-700 dark:text-primary-light">
+              {{title_question_obj.title}}
+            </p>
+          </div>
+          <ul class="mr-2 space-y-4 divide-y divide-secondary-light dark:divide-primary-light/5">
+            {% for question in title_question_obj.quest.all %}
+            <li>
+              <div data-accordion="open">
+                <div class="space-y-2">
+                  <h2 id="faq-{{question.id}}">
+                    <button aria-controls="faq-body-{{question.id}}" aria-expanded="false"
+                      class="flex w-full items-center justify-between rounded-lg px-4 py-3 text-quaternary-700 dark:text-primary-light"
+                      data-accordion-target="#faq-body-{{question.id}}" type="button">
+                      <span class="flex items-center">{{question.quest}}</span>
+
+                      <svg aria-hidden="true" class="h-6 w-6" data-accordion-icon>
+                        <use xlink:href="#chevron-down" />
+                      </svg>
+                    </button>
+                  </h2>
+                  <div aria-labelledby="faq-heading-{{question.id}}" class="hidden" id="faq-body-{{question.id}}">
+                    <div class="mr-6 text-quaternary-600 dark:text-quaternary-300">
+                      {{question.answer}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Footer -->
+    <div class="flex justify-center">
+      <p class="mb-5 text-sm text-quaternary-600 dark:text-quaternary-300 xs:text-base">
+        سوال خود را پیدا نکردید ؟
+        <a href="#" class="text-tertiary-500 dark:text-tertiary-400">با ما تماس بگیرید</a>
+      </p>
+    </div>
+  </div>
+</main>
+  {% endblock content %}
+
+
+
+{% block page_js %}
+{% load static %}
+
+
+<script src="{% static 'frest_temp/vendor/libs/jquery/jquery.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'shop_temp/ShopJs/CardList.js' %}"></script>
+
+{% endblock page_js %}
+
+
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/fonts/boxicons.css' %}" />
+
+{% endblock css %}

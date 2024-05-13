@@ -1,0 +1,46 @@
+{% extends 'ShopBaseNew.html' %}
+
+
+  
+{% block content %}
+{% load static %}
+<main class="flex-grow bg-secondary-light pb-14 pt-36 dark:bg-primary-dark xs:pt-36">
+    <div class="container rounded-lg bg-primary-light p-5 dark:bg-secondary-dark">
+      <!-- Head -->
+      <div class="mb-5 flex">
+        <h1 class="relative select-none pb-2 text-lg text-quaternary-700 dark:text-primary-light md:text-xl">
+          {{title}}
+          <span
+            class="absolute bottom-0 right-0 h-0.5 w-full rounded-full bg-tertiary-500 dark:bg-tertiary-400"></span>
+        </h1>
+      </div>
+      <!-- Content -->
+      <div class="space-y-4">
+      
+        {{text | safe}}
+      </div>
+    </div>
+  </main>
+{% endblock content %}
+
+
+
+{% block page_js %}
+{% load static %}
+
+
+<script src="{% static 'frest_temp/vendor/libs/jquery/jquery.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'shop_temp/ShopJs/CardList.js' %}"></script>
+
+{% endblock page_js %}
+
+
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/fonts/boxicons.css' %}" />
+
+{% endblock css %}

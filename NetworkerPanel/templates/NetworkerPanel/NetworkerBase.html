@@ -1,0 +1,906 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" class="light-style" dir="rtl" data-theme="theme-default" data-assets-path="../../assets/"
+  data-template="horizontal-menu-template-no-customizer">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+  <title>Ib7</title>
+
+  <meta name="description" content="">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" sizes="200x200 " href="{% static 'frest_temp/img/main_logo.jpg' %}">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/fonts/boxicons.css' %}">
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/fonts/fontawesome.css' %}">
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/fonts/flag-icons.css' %}">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/css/rtl/core.css' %}">
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/css/rtl/theme-default.css' %}">
+  <link rel="stylesheet" href="{% static 'frest_temp/css/demo.css' %}">
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/css/rtl/rtl.css' %}">
+
+  <!-- Vendors CSS -->
+
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+  <link rel="stylesheet" href="{% static 'frest_temp/vendor/fonts/boxicons.css' %}" />
+
+
+  <!-- Page CSS -->
+  {% block css %}
+  {% endblock css %}
+  <!-- Helpers -->
+  <script src="{% static 'frest_temp/vendor/js/helpers.js' %}"></script>
+
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+  <script src="{% static 'frest_temp/js/config.js' %}"></script>
+
+  <!-- Icons -->
+
+  <!-- Core CSS -->
+
+  <!-- Vendors CSS -->
+
+
+  <!-- Page CSS -->
+
+  <!-- Core CSS -->
+
+  <!-- Vendors CSS -->
+
+
+  <!-- Page CSS -->
+
+  <!-- Helpers -->
+
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+</head>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
+    <div class="layout-container">
+      <!-- Navbar -->
+
+      <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+        <div class="container-xxl">
+          <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
+            <a href="" class="app-brand-link gap-2">
+              <img src="{% static 'frest_temp/img/main_logo.jpg' %}"
+                style="width: 122px;height: 65px;border-radius: 81px;" alt="">
+
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
+              <i class="bx bx-x bx-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              {% comment %} <!-- Language -->
+              <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <i class="fi fi-ir fis rounded-circle fs-3 me-1"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0);" data-language="fa">
+                      <i class="fi fi-ir fis rounded-circle fs-4 me-1"></i>
+                      <span class="align-middle">فارسی</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0);" data-language="en">
+                      <i class="fi fi-us fis rounded-circle fs-4 me-1"></i>
+                      <span class="align-middle">انگلیسی</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0);" data-language="fr">
+                      <i class="fi fi-fr fis rounded-circle fs-4 me-1"></i>
+                      <span class="align-middle">فرانسوی</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0);" data-language="de">
+                      <i class="fi fi-de fis rounded-circle fs-4 me-1"></i>
+                      <span class="align-middle">آلمانی</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0);" data-language="pt">
+                      <i class="fi fi-pt fis rounded-circle fs-4 me-1"></i>
+                      <span class="align-middle">پرتغالی</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ Language -->
+
+              <!-- Search -->
+              <li class="nav-item navbar-search-wrapper me-2 me-xl-0">
+                <a class="nav-item nav-link search-toggler" href="javascript:void(0);">
+                  <i class="bx bx-search bx-sm"></i>
+                </a>
+              </li>
+              <!-- /Search -->
+
+              <!-- Style Switcher -->
+              <li class="nav-item me-2 me-xl-0">
+                <a class="nav-link style-switcher-toggle hide-arrow" href="javascript:void(0);">
+                  <i class="bx bx-sm"></i>
+                </a>
+              </li>
+              <!--/ Style Switcher -->
+
+              <!-- Quick links  -->
+              <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-2 me-xl-0">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
+                  data-bs-auto-close="outside" aria-expanded="false">
+                  <i class="bx bx-grid-alt bx-sm"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end py-0">
+                  <div class="dropdown-menu-header border-bottom">
+                    <div class="dropdown-header d-flex align-items-center py-3">
+                      <h5 class="text-body mb-0 me-auto secondary-font">میانبرها</h5>
+                      <a href="javascript:void(0)" class="dropdown-shortcuts-add text-body" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="افزودن میانبر"><i class="bx bx-sm bx-plus-circle"></i></a>
+                    </div>
+                  </div>
+                  <div class="dropdown-shortcuts-list scrollable-container">
+                    <div class="row row-bordered overflow-visible g-0">
+                      <div class="dropdown-shortcuts-item col">
+                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                          <i class="bx bx-calendar fs-4"></i>
+                        </span>
+                        <a href="app-calendar.html" class="stretched-link">تقویم</a>
+                        <small class="text-muted mb-0">قرارهای ملاقات</small>
+                      </div>
+                      <div class="dropdown-shortcuts-item col">
+                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                          <i class="bx bx-food-menu fs-4"></i>
+                        </span>
+                        <a href="app-invoice-list.html" class="stretched-link">برنامه صورتحساب</a>
+                        <small class="text-muted mb-0">مدیریت حساب‌ها</small>
+                      </div>
+                    </div>
+                    <div class="row row-bordered overflow-visible g-0">
+                      <div class="dropdown-shortcuts-item col">
+                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                          <i class="bx bx-user fs-4"></i>
+                        </span>
+                        <a href="app-user-list.html" class="stretched-link">برنامه کاربر</a>
+                        <small class="text-muted mb-0">مدیریت کاربران</small>
+                      </div>
+                      <div class="dropdown-shortcuts-item col">
+                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                          <i class="bx bx-check-shield fs-4"></i>
+                        </span>
+                        <a href="app-access-roles.html" class="stretched-link">مدیریت نقش‌‌ها</a>
+                        <small class="text-muted mb-0">مجوزها</small>
+                      </div>
+                    </div>
+                    <div class="row row-bordered overflow-visible g-0">
+                      <div class="dropdown-shortcuts-item col">
+                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                          <i class="bx bx-pie-chart-alt-2 fs-4"></i>
+                        </span>
+                        <a href="index.html" class="stretched-link">داشبورد</a>
+                        <small class="text-muted mb-0">پروفایل کاربر</small>
+                      </div>
+                      <div class="dropdown-shortcuts-item col">
+                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                          <i class="bx bx-cog fs-4"></i>
+                        </span>
+                        <a href="pages-account-settings-account.html" class="stretched-link">تنظیمات</a>
+                        <small class="text-muted mb-0">تنظیمات حساب</small>
+                      </div>
+                    </div>
+                    <div class="row row-bordered overflow-visible g-0">
+                      <div class="dropdown-shortcuts-item col">
+                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                          <i class="bx bx-help-circle fs-4"></i>
+                        </span>
+                        <a href="pages-help-center-landing.html" class="stretched-link">مرکز راهنمایی</a>
+                        <small class="text-muted mb-0">سوالات متداول و مقالات</small>
+                      </div>
+                      <div class="dropdown-shortcuts-item col">
+                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                          <i class="bx bx-window-open fs-4"></i>
+                        </span>
+                        <a href="modal-examples.html" class="stretched-link">مودال‌ها</a>
+                        <small class="text-muted mb-0">پاپ‌آپ‌های کاربردی</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <!-- Quick links -->
+
+              <!-- Notification -->
+              <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
+                  data-bs-auto-close="outside" aria-expanded="false">
+                  <i class="bx bx-bell bx-sm"></i>
+                  <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end py-0">
+                  <li class="dropdown-menu-header border-bottom">
+                    <div class="dropdown-header d-flex align-items-center py-3">
+                      <h5 class="text-body mb-0 me-auto secondary-font">اعلان‌ها</h5>
+                      <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="علامت خوانده شده به همه"><i
+                          class="bx fs-4 bx-envelope-open"></i></a>
+                    </div>
+                  </li>
+                  <li class="dropdown-notifications-list scrollable-container">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <img src="../../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle">
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن ساختگی با</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
+                            <small class="text-muted">1 ساعت قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-danger">اک</span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن ساختگی</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با</p>
+                            <small class="text-muted">12 ساعت قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <img src="../../assets/img/avatars/2.png" alt class="w-px-40 h-auto rounded-circle">
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی</p>
+                            <small class="text-muted">1 ساعت قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-success"><i
+                                  class="bx bx-cart"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن ساختگی با تولید</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با تولید</p>
+                            <small class="text-muted">1 روز قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <img src="../../assets/img/avatars/9.png" alt class="w-px-40 h-auto rounded-circle">
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن ساختگی با تولید</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</p>
+                            <small class="text-muted">2 روز قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-success"><i
+                                  class="bx bx-pie-chart-alt"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن ساختگی با تولید</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
+                            <small class="text-muted">3 روز قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <img src="../../assets/img/avatars/5.png" alt class="w-px-40 h-auto rounded-circle">
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن ساختگی با</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی</p>
+                            <small class="text-muted">4 روز قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <img src="../../assets/img/avatars/6.png" alt class="w-px-40 h-auto rounded-circle">
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن ساختگی</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با تولید</p>
+                            <small class="text-muted">5 روز قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <span class="avatar-initial rounded-circle bg-label-warning"><i
+                                  class="bx bx-error"></i></span>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">لورم ایپسوم متن ساختگی</h6>
+                            <p class="mb-0">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از</p>
+                            <small class="text-muted">5 روز قبل</small>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="dropdown-menu-footer border-top">
+                    <a href="javascript:void(0);" class="dropdown-item d-flex justify-content-center p-3">
+                      مشاهده همه اعلان‌ها
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ Notification --> {% endcomment %}
+
+              <!-- User -->
+              <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown"
+                  data-bs-auto-close="outside" aria-expanded="false">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"
+                    style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
+                    <path
+                      d="M5 22h14c1.103 0 2-.897 2-2V9a1 1 0 0 0-1-1h-3V7c0-2.757-2.243-5-5-5S7 4.243 7 7v1H4a1 1 0 0 0-1 1v11c0 1.103.897 2 2 2zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v1H9V7zm-4 3h2v2h2v-2h6v2h2v-2h2l.002 10H5V10z">
+                    </path>
+                  </svg>
+                  <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end py-0">
+                  <li class="dropdown-menu-header border-bottom">
+                    <div class="dropdown-header d-flex align-items-center py-3">
+                      <h5 class="text-body mb-0 me-auto secondary-font">سبد خرید</h5>
+                      <a href="javascript:void(0)" class="dropdown-notifications-all text-body" > <svg xmlns="http://www.w3.org/2000/svg"
+                          width="25" height="25" viewBox="0 0 24 24"
+                          style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
+                          <path
+                            d="M5 22h14c1.103 0 2-.897 2-2V9a1 1 0 0 0-1-1h-3V7c0-2.757-2.243-5-5-5S7 4.243 7 7v1H4a1 1 0 0 0-1 1v11c0 1.103.897 2 2 2zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v1H9V7zm-4 3h2v2h2v-2h6v2h2v-2h2l.002 10H5V10z">
+                          </path>
+                        </svg></a>
+                    </div>
+                  </li>
+                  <li class="dropdown-notifications-list scrollable-container">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                              <img src="{% static 'frest_temp/img/avatars/1.png' %}" alt
+                                class="w-px-60 h-auto">
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <h6 class="mb-1">محصول : title</h6>
+                            <p class="mb-0">قیمت واحد : 27,000</p>
+                            <small class="text-muted">تعداد :20</small>
+                            <p class="mb-0">قیمت کل : 27,000</p>
+                          </div>
+                          <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="javascript:void(0)" class="dropdown-notifications-read"><span
+                                class="badge badge-dot"></span></a>
+                            <a href="javascript:void(0)" class="dropdown-notifications-archive"><span
+                                class="bx bx-x"></span></a>
+                          </div>
+                        </div>
+                      </li>
+
+                    </ul>
+                   
+                    <span class="dropdown-item d-flex justify-content-center p-3">قیمت کل : 27000</span>
+                  </li>
+                  <li class="dropdown-menu-footer border-top">
+                   
+                    <a href="javascript:void(0);" class="dropdown-item d-flex justify-content-center p-3">
+                      مشاهده سبد خرید
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="{% static 'frest_temp/img/new_prof.jpg' %}" alt class="rounded-circle">
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="pages-account-settings-account.html">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="{% static 'frest_temp/img/new_prof.jpg' %}" alt class="rounded-circle">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block lh-1">{{request.user.first_name}}
+                            {{request.user.last_name}}</span>
+                          <small>بازاریاب</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="pages-profile-user.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">پروفایل من</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="pages-account-settings-account.html">
+                      <i class="bx bx-cog me-2"></i>
+                      <span class="align-middle">تنظیمات</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="pages-account-settings-billing.html">
+                      <span class="d-flex align-items-center align-middle">
+                        <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                        <span class="flex-grow-1 align-middle">صورتحساب</span>
+                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="pages-help-center-landing.html">
+                      <i class="bx bx-support me-2"></i>
+                      <span class="align-middle">راهنمایی</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="pages-faq.html">
+                      <i class="bx bx-help-circle me-2"></i>
+                      <span class="align-middle">سوالات متداول</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="pages-pricing.html">
+                      <i class="bx bx-dollar me-2"></i>
+                      <span class="align-middle">قیمت گذاری</span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">خروج</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+
+          <!-- Search Small Screens -->
+          <div class="navbar-search-wrapper search-input-wrapper container-xxl d-none">
+            <input type="text" class="form-control search-input border-0" placeholder="جستجو ..."
+              aria-label="Search...">
+            <i class="bx bx-x bx-sm search-toggler cursor-pointer"></i>
+          </div>
+        </div>
+      </nav>
+
+      <!-- / Navbar -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Menu -->
+          <aside id="layout-menu" class="layout-menu-horizontal menu-horizontal menu bg-menu-theme flex-grow-0">
+            <div class="container-xxl d-flex h-100">
+              <ul class="menu-inner">
+
+
+                <li class="menu-item">
+                  <a href="{% url 'NetworkerPanel:Home' %}" class="menu-link ">
+                    <i class='menu-icon bx bx-home-circle'></i>
+                    <div data-i18n="Components">خانه</div>
+                  </a>
+
+                </li>
+
+                <li class="menu-item">
+                  <a href="{% url 'NetworkerPanel:ProductList' %}" class="menu-link ">
+                    <i class='menu-icon bx bxs-store'></i>
+
+                    <div data-i18n="Components">لیست محصولات</div>
+                  </a>
+
+                </li>
+
+                <!-- <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-code-block"></i>
+                    <div data-i18n="Components">صدور فاکتور</div>
+                  </a>
+                  <ul class="menu-sub">
+
+                    <li class="menu-item">
+                      <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-collection"></i>
+                        <div data-i18n="Cards">مشتری ها</div>
+                      </a>
+                      <ul class="menu-sub">
+                        <li class="menu-item">
+                          <a href="{% url 'instalment_app:CostumerList' %}" class="menu-link">
+                            <div data-i18n="Basic">لیست مشتری ها</div>
+                          </a>
+                        </li>
+                        <li class="menu-item">
+                          <a href="{% url 'instalment_app:CreateCostumer' %}" class="menu-link">
+                            <div data-i18n="Advance">ساخت مشتری</div>
+                          </a>
+                        </li>
+
+                      </ul>
+                    </li>
+
+                    <li class="menu-item">
+                      <a href="javascript:void(0)" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-box"></i>
+                        <div data-i18n="User interface">صورتحساب ها</div>
+                      </a>
+                      <ul class="menu-sub">
+                        <li class="menu-item">
+                          <a href="{% url 'instalment_app:FactorList' %}" class="menu-link">
+                            <div data-i18n="Accordion">لیست صورتحساب ها</div>
+                          </a>
+                        </li>
+                        <li class="menu-item">
+                          <a href="{% url 'instalment_app:CreateFactor' %}" class="menu-link">
+                            <div data-i18n="Accordion">ساخت صورتحساب </div>
+                          </a>
+                        </li>
+                        <li class="menu-item">
+                          <a href="{% url 'instalment_app:PostSmsList' %}" class="menu-link">
+                            <div data-i18n="Accordion">ثبت کد مرسوله </div>
+                          </a>
+                        </li>
+
+                      </ul>
+                    </li>
+
+
+                  </ul>
+                </li>
+
+
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link menu-toggle">
+                    <i class=' menu-icon bx bx-user-circle'></i>
+                    <div data-i18n="Components">مدیریت کاربران</div>
+                  </a>
+                  <ul class="menu-sub">
+
+                    <li class="menu-item">
+                      <a href="{% url 'UserManageMentUrl:UserList'  %}" class="menu-link ">
+                        <i class=' menu-icon bx bx-list-ol'></i>
+                        <div data-i18n="Cards">لیست کاربران</div>
+                      </a>
+
+                    </li>
+
+
+                  </ul>
+                </li>
+
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link menu-toggle">
+                    <i class=' menu-icon bx bxs-store'></i>
+
+                    <div data-i18n="Components">مدیریت محصولات</div>
+                  </a>
+                  <ul class="menu-sub">
+
+                    <li class="menu-item">
+                      <a href="javascript:void(0);" class="menu-link menu-toggle">
+
+                        <i class='menu-icon bx bx-category'></i>
+                        <div data-i18n="Cards"> دسته بندی ها</div>
+                      </a>
+                      <ul class="menu-sub">
+                        <li class="menu-item">
+                          <a href="{% url 'ShopManageMentUrl:CategoryThree' %}" class="menu-link">
+                            <div data-i18n="Basic">دسته بندی سوم</div>
+                          </a>
+                        </li>
+                        <li class="menu-item">
+                          <a href="{% url 'ShopManageMentUrl:CategoryTwo' %}" class="menu-link">
+                            <div data-i18n="Advance">دسته بندی دوم</div>
+                          </a>
+                        </li>
+                        <li class="menu-item">
+                          <a href="{% url 'ShopManageMentUrl:CategoryOne' %}" class="menu-link">
+                            <div data-i18n="Advance">دسته بندی اول</div>
+                          </a>
+                        </li>
+
+                      </ul>
+                    </li>
+                    <li class="menu-item">
+                      <a href="javascript:void(0);" class="menu-link menu-toggle">
+
+                        <i class='menu-icon bx bx-shopping-bag'></i>
+                        <div data-i18n="Cards"> موجودی محصولات</div>
+                      </a>
+                      <ul class="menu-sub">
+                        <li class="menu-item">
+                          <a href="{% url 'ShopManageMentUrl:ColorList' %}" class="menu-link">
+                            <div data-i18n="Basic">لست رنگ ها</div>
+                          </a>
+                        </li>
+                        <li class="menu-item">
+                          <a href="{% url 'ShopManageMentUrl:SizeList' %}" class="menu-link">
+                            <div data-i18n="Advance">لیست سایز ها</div>
+                          </a>
+                        </li>
+                        <li class="menu-item">
+                          <a href="{% url 'ShopManageMentUrl:InventoryList' %}" class="menu-link">
+                            <div data-i18n="Advance">لیست موجودی محصولات</div>
+                          </a>
+                        </li>
+
+                      </ul>
+                    </li>
+                    <li class="menu-item">
+                      <a href="{% url 'ShopManageMentUrl:ProductList'  %}" class="menu-link ">
+                        <i class=' menu-icon bx bx-list-ol'></i>
+                        <div data-i18n="Cards">لیست محصولات</div>
+                      </a>
+
+                    </li>
+                    <li class="menu-item">
+                      <a href="{% url 'ShopManageMentUrl:CreateProduct'  %}" class="menu-link ">
+                        <i class=' menu-icon bx bx-list-ol'></i>
+                        <div data-i18n="Cards">ایجاد محصول</div>
+                      </a>
+
+                    </li>
+
+
+                  </ul>
+                </li>
+
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link menu-toggle">
+
+                    <i class='menu-icon bx bx-money'></i>
+
+                    <div data-i18n="Components">امور مالی</div>
+                  </a>
+                  <ul class="menu-sub">
+
+                    <li class="menu-item">
+                      <a href="{% url 'instalment_app:CheckPeymentList'  %}" class="menu-link ">
+
+                        <i class='menu-icon bx bx-credit-card-front'></i>
+                        <div data-i18n="Cards">لیست چک ها</div>
+                      </a>
+
+                    </li>
+
+
+
+
+                  </ul>
+                </li>
+
+                <li class="menu-item">
+                  <a href="{% url 'instalment_app:BankAccount' %}" class="menu-link ">
+                    <i class=' menu-icon bx bxs-bank'></i>
+
+
+                    <div data-i18n="Components">حساب ها</div>
+                  </a>
+
+
+                </li> -->
+
+
+              </ul>
+            </div>
+          </aside>
+          <!-- / Menu -->
+
+          <!-- Content -->
+          {% block content %}
+          {% endblock content %}
+          <!--/ Content -->
+
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                تعاونی تلاش فناوران جم
+              </div>
+              <div>
+
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!--/ Content wrapper -->
+      </div>
+
+      <!--/ Layout container -->
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="layout-overlay layout-menu-toggle"></div>
+
+  <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+  <div class="drag-target"></div>
+
+  <!--/ Layout wrapper -->
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="{% static 'frest_temp/vendor/libs/jquery/jquery.js' %}"></script>
+  <script src="{% static 'frest_temp/vendor/libs/popper/popper.js' %}"></script>
+  <script src="{% static 'frest_temp/vendor/js/bootstrap.js' %}"></script>
+  <script src="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+
+  <script src="{% static 'frest_temp/vendor/libs/hammer/hammer.js' %}"></script>
+
+  <script src="{% static 'frest_temp/vendor/libs/i18n/i18n.js' %}"></script>
+  <script src="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.js' %}"></script>
+
+  <script src="{% static 'frest_temp/vendor/js/menu.js' %}"></script>
+
+
+  <!-- endbuild -->
+
+
+
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+
+  <!-- Main JS -->
+
+  <!-- Page JS -->
+
+  <!-- Vendors JS -->
+  {% block vendors %}
+
+  {% endblock vendors %}
+  <!-- Main JS -->
+  <script src="{% static 'frest_temp/js/main.js' %}"></script>
+
+
+
+
+
+  {% block page_js %}
+
+  {% endblock page_js %}
+
+  <!-- Page JS -->
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+{% extends 'Ib7Base.html' %}
+{% block content %}
+<input type="hidden" id="ColorManagerUrl" value="{% url 'ShopManageMentUrl:ColorManager' %}">
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Layout Demo -->
+    <br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style2 mb-0">
+            <li class="breadcrumb-item">
+                <a href="{% url 'HomePageUrl:HomePage' %}">خانه</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">مدیریت محصولات</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">موجودی محصولات</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">لیست رنگ ها</a>
+            </li>
+
+        </ol>
+    </nav>
+    <br>
+    <div class="card">
+        <div class="modal fade" id="CreateColorModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title secondary-font" id="modalCenterTitle">ایجاد رنگ جدید</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{% url 'ShopManageMentUrl:ColorManager' %}" id="CreateColorForm">
+                        <div class="modal-body">
+                            <div class="row">
+                                {% csrf_token %}
+                                <div class="col mb-3">
+                                    <label for="nameWithTitle" class="form-label">نام رنگ</label>
+                                    <input type="text" name="color_name" id="nameWithTitle" class="form-control"
+                                        placeholder="نام را وارد کنید" required>
+                                </div>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="html5-color-input" class="form-label">انتخاب کد رنگ</label>
+                                    <input class="form-control" type="color" name="color_code" value="#666EE8">
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                بستن
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="CreateColorBtn">ذخیره تغییرات</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-header ">
+            <h5 style="float:right;">لیست رنگ ها</h5>
+            <button type="button" class="btn rounded-pill btn-secondary" data-bs-toggle="modal"
+                data-bs-target="#CreateColorModal" style="float:left;">ایجاد مورد جدید <i
+                    class='bx bx-user-plus bx-tada'></i></button>
+        </div>
+
+        <div class="card-datatable text-nowrap">
+            <table class="dt-scrollableTable table table-bordered">
+                <thead>
+                    <tr>
+                        <th>شناسه</th>
+                        <th>عنوان</th>
+                        <th>رنگ</th>
+
+                        <th>عمل</th>
+
+
+
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    {% for color in colors %}
+    <div class="modal fade" id="EditColorModal_{{color.id}}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title secondary-font" id="modalCenterTitle">ایجاد تغییر در رنگ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'ShopManageMentUrl:ColorManager' color.id %}"
+                    id="EditColor_{{color.id}}">
+                    <div class="modal-body">
+                        <div class="row">
+                            {% csrf_token %}
+                            <div class="col mb-3">
+                                <label for="nameWithTitle" class="form-label">نام رنگ</label>
+                                <input type="text" name="color_name" value="{{color.name}}" id="nameWithTitle" class="form-control"
+                                    placeholder="نام را وارد کنید" required>
+                            </div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="selectpickerSelectDeselect" class="form-label">  انتخاب دسته بندی </label>
+                                <input class="form-control" type="color" name="color_code" value="{{color.color_code}}"
+                                    id="html5-color-input">
+                        </div>
+
+                    </div>
+                    {% csrf_token %}
+                    <input type="hidden" id="cat_id" value="{{color.id}}">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                            بستن
+                        </button>
+                        <button type="button" class="btn btn-primary" id="EditColorBtn_{{color.id}}"
+                            onclick="EditColor({{color.id}})">ذخیره تغییرات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <!--/ Layout Demo -->
+</div>
+{% endblock content %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+{% endblock css %}
+{% block page_js %}
+{% load static %}
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ShopJs/ShopManageMent/InventoryManager/ColorList.js' %}"></script>
+<!-- page js -->
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+{% endblock page_js %}
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendors %}

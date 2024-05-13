@@ -1,0 +1,319 @@
+{% extends 'Ib7Base.html' %}
+
+
+{% block content %}
+
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style2 mb-0">
+      <li class="breadcrumb-item">
+        <a href="{% url 'HomePageUrl:HomePage' %}">خانه</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'ShopManageMentUrl:ProductList' %}">لیست محصولات</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="javascript:void(0);">ساخت محصول جدید </a>
+      </li>
+
+    </ol>
+  </nav>
+  <!-- Default -->
+  <div class="row">
+
+
+    <!-- Default Wizard -->
+    <div class="col-12 mb-4">
+
+      <div class="bs-stepper wizard-numbered mt-2">
+        <div class="bs-stepper-header">
+          <div class="step" data-target="#account-details">
+            <button type="button" class="step-trigger">
+              <span class="bs-stepper-circle">1</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">جزئیات محصول</span>
+                <span class="bs-stepper-subtitle">تنظیم جزئیات محصول</span>
+              </span>
+            </button>
+          </div>
+          <div class="line"></div>
+          <div class="step" data-target="#product-property">
+            <button type="button" class="step-trigger">
+              <span class="bs-stepper-circle">2</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">ویژگی ها مشخصات</span>
+                <span class="bs-stepper-subtitle">ثبت ویژگی ها و مشخصات محصول</span>
+              </span>
+            </button>
+          </div>
+          <div class="line"></div>
+          <div class="step" data-target="#personal-info">
+            <button type="button" class="step-trigger">
+              <span class="bs-stepper-circle">3</span>
+              <span class="bs-stepper-label">
+                <span class="bs-stepper-title">عکس های محصول </span>
+                <span class="bs-stepper-subtitle">افزودن عکس های محصول</span>
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="bs-stepper-content">
+          <form id="CreateProduct_Form" action="{% url 'ShopManageMentUrl:ProductManageMent' %}">
+            <!-- Account Details -->
+            {% csrf_token %}
+            <div id="account-details" class="content">
+              <div class="content-header mb-3">
+                <h6 class="mb-1">جزئیات حساب</h6>
+                <small>جزئیات حساب خود را وارد کنید.</small>
+              </div>
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label class="form-label" for="title_id">عنوان</label>
+                  <input type="text" id="title_id" class="form-control text-start" name="title"
+                    placeholder="عنوان محصول" dir="ltr">
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="price_id">قیمت</label>
+                  <input type="number" id="price_id" name="price" min=0 class="form-control text-start"
+                    placeholder="1,000,000" aria-label="john.doe@email.com" dir="ltr">
+                  <span id="product_price">0 تومان</span>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="price_id">دسته بندی</label>
+                  <select id="selectpickerSelectDeselect" name="category" class="selectpicker w-100"
+                    data-style="btn-default" multiple data-actions-box="true">
+                    {% for category in categorys %}
+                    <option value="{{category.id}}">{{category.title}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="price_id">فیلتر نمایش </label>
+                  <select id="selectpickerSelectDeselect" name="show_filters" class="selectpicker w-100"
+                    data-style="btn-default" multiple data-actions-box="true">
+                    {% for show in showfilters %}
+                    <option value="{{show.id}}">{{show.title}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col ">
+                  <label class="form-label" for="discription_id">توضیحات</label>
+                  <div class="input-group input-group-merge">
+                    <textarea name="discription" class="form-control" id="discription_id"
+                      placeholder="توضیحات"></textarea>
+                  </div>
+                </div>
+
+                <div class="col-12 d-flex justify-content-between">
+                  <button class="btn btn-label-secondary btn-prev" disabled>
+                    <i class="bx bx-chevron-left bx-sm ms-sm-n2"></i>
+                    <span class="d-sm-inline-block d-none">قبلی</span>
+                  </button>
+                  <button type="button" class="btn btn-primary btn-next">
+                    <span class="d-sm-inline-block d-none">بعدی</span>
+                    <i class="bx bx-chevron-right bx-sm me-sm-n2"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div id="product-property" class="content">
+            <div class="content-header mb-3">
+              <h6 class="mb-1">ثبت ویژگی محصول</h6>
+
+            </div>
+            <form class="form-repeater">
+              <div data-repeater-list="group-a" id="main_list_pr">
+                <div class="list_property" data-repeater-item>
+                  <div class="row">
+                    <div class="mb-3 col-lg-6 col-xl-5 col-12 mb-0">
+                      <label class="form-label" for="form-repeater-1-1">عنوان</label>
+                      <input type="text" id="form-repeater-1-1" class="form-control text-start title_pr"
+                        placeholder="عنوان ویژگی" dir="ltr">
+                    </div>
+                    <div class="mb-3 col-lg-6 col-xl-5 col-12 mb-0">
+                      <label class="form-label" for="form-repeater-1-2">توضیحات ویژگی</label>
+                      <input type="text" id="form-repeater-1-2" class="form-control text-start dis_pr"
+                        placeholder="توضیحات ویژگی" dir="ltr">
+                    </div>
+
+                    <div class="mb-3 col-lg-12 col-xl-2 col-12 d-flex align-items-center mb-0">
+                      <button class="btn btn-icon rounded-pill btn-google-plus mt-4" data-repeater-delete>
+                        <i class="bx bx-x "></i>
+
+                      </button>
+                    </div>
+                  </div>
+                  <hr>
+                </div>
+              </div>
+              <div class="mb-0 d-flex justify-content-center align-items-center">
+                <button class="btn btn-primary" data-repeater-create>
+                  <i class="bx bx-plus me-1"></i>
+                  <span class="align-middle">افزودن ویژگی</span>
+                </button>
+              </div>
+            </form>
+            <div class="content-header mb-3">
+              <h6 class="mb-1">ثبت مشخصات محصول</h6>
+
+            </div>
+            <form class="form-repeater">
+              <div data-repeater-list="group-a">
+                <div data-repeater-item class="sp_list">
+                  <div class="row">
+                    <div class="mb-3 col-lg-6 col-xl-5 col-12 mb-0">
+                      <label class="form-label" for="form-repeater-1-1">عنوان</label>
+                      <input type="text" id="form-repeater-1-1" class="form-control text-start title_sp"
+                        placeholder="عنوان مشخصات" dir="ltr">
+                    </div>
+                    <div class="mb-3 col-lg-6 col-xl-5 col-12 mb-0">
+                      <label class="form-label" for="form-repeater-1-2">توضیحات مشخصات</label>
+                      <input type="text" id="form-repeater-1-2" class="form-control text-start dis_sp"
+                        placeholder="توضیحات مشخصات" dir="ltr">
+                    </div>
+
+                    <div class="mb-3 col-lg-12 col-xl-2 col-12 d-flex align-items-center mb-0">
+                      <button class="btn btn-icon rounded-pill btn-google-plus mt-4" data-repeater-delete>
+                        <i class="bx bx-x "></i>
+
+                      </button>
+                    </div>
+                  </div>
+                  <hr>
+                </div>
+              </div>
+              <div class="mb-0 d-flex justify-content-center align-items-center">
+                <button class="btn btn-primary" data-repeater-create>
+                  <i class="bx bx-plus me-1"></i>
+                  <span class="align-middle">افزودن مشخصات</span>
+                </button>
+              </div>
+            </form>
+            <div class="col-12 d-flex justify-content-between">
+              <button class="btn btn-label-secondary btn-prev">
+                <i class="bx bx-chevron-left bx-sm ms-sm-n2"></i>
+                <span class="d-sm-inline-block d-none">قبلی</span>
+              </button>
+              <button type="button" class="btn btn-primary btn-next">
+                <span class="d-sm-inline-block d-none">بعدی</span>
+                <i class="bx bx-chevron-right bx-sm me-sm-n2"></i>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- Personal Info -->
+          <div id="personal-info" class="content">
+            <div class="content-header mb-3">
+              <h6 class="mb-1">اطلاعات شخصی</h6>
+              <small>اطلاعات شخصی خود را وارد کنید.</small>
+            </div>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label for="" class="form-label">عکس اصلی محصول</label>
+                <form action="{% url 'ShopManageMentUrl:AddMainFileProduct' %}" enctype="multipart/form-data"
+                  method="post" class="dropzone" id="dropzone-basic">
+                  {% csrf_token %}
+                  <div class="dz-message dz">
+                    عکس را اینجا رها کنید
+                    <span class="note dz">(عکس اصلی محصول)</span>
+                  </div>
+                  <div class="fallback">
+                    <input name="file" type="file">
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="col-sm-6">
+                <label for="" class="form-label">گالری عکس های محصول</label>
+                <form action="{% url 'ShopManageMentUrl:GaleryImageProduct' %}" class="dropzone"
+                  enctype="multipart/form-data" id="dropzone-multi">
+                  {% csrf_token %}
+                  <div class="dz-message needsclick">
+                    عکس ها را اینجا رها کنید
+                    <span class="note needsclick">(گالری عکس های محصول)</span>
+                  </div>
+                  <div class="fallback">
+                    <input name="file" type="file">
+                  </div>
+                </form>
+              </div>
+
+              <div class="col-12 d-flex justify-content-between">
+                <button type="button" class="btn btn-label-secondary btn-prev">
+                  <i class="bx bx-chevron-left bx-sm ms-sm-n2"></i>
+                  <span class="d-sm-inline-block d-none">قبلی</span>
+                </button>
+                <button type="button" class="btn btn-success btn" id="CreateProductBtn">ثبت</button>
+              </div>
+            </div>
+          </div>
+          <!-- Social Links -->
+
+
+
+        </div>
+      </div>
+    </div>
+    <!-- /Default Wizard -->
+
+    <!-- /Vertical Wizard -->
+  </div>
+  <hr class="container-m-nx mb-5">
+
+  <!-- Modern -->
+
+</div>
+
+
+{% endblock content %}
+
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+<!-- <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/dropzone/dropzone.css' %}">
+ -->
+<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bs-stepper/bs-stepper.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/formvalidation/dist/css/formValidation.min.css' %}">
+<script src="{% static 'frest_temp/vendor/js/template-customizer.js' %}"></script>
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+{% endblock css %}
+
+
+{% block page_js %}
+{% load static %}
+<script src="{% static 'frest_temp/ShopJs/ShopManageMent/ProductManageMent/CreateProduct.js' %}"></script>
+<script src="{% static 'frest_temp/js/form-wizard-numbered.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/js/form-wizard-validation.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-extras.js' %}"></script>
+{% endblock page_js %}
+
+{% block vendors %}
+{% load static %}
+
+<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-repeater/jquery-repeater.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bs-stepper/bs-stepper.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/formvalidation/dist/js/FormValidation.min.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendors %}

@@ -1,0 +1,590 @@
+{% extends 'Ib7Base.html' %}
+
+{% block content %}
+{% load static %}
+<input type="hidden" id="FactorUrl" value="{% url 'instalment_app:FactorManageMent' %}">
+
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style2 mb-0">
+      <li class="breadcrumb-item">
+        <a href="javascript:void(0);">خانه</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'instalment_app:FactorList' %}" id="FactorList">لیست صورت حساب ها</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="javascript:void(0);">ثبت صورت حساب جدید</a>
+      </li>
+
+
+    </ol>
+  </nav>
+  <hr>
+  <div class="row invoice-add">
+    <!-- Invoice Add-->
+    <div class="col-lg-9 col-12 mb-lg-0 mb-4">
+      <div class="card invoice-preview-card">
+        <div class="card-body">
+          <div class="row p-sm-3 p-0">
+            <div class="col-md-6 mb-md-0 mb-4">
+              <div class="d-flex align-items-center svg-illustration mb-4 gap-2">
+
+
+                <img src="{% static 'frest_temp/img/main_logo.jpg' %}" class="logo-factor" alt="">
+              </div>
+              <p class="mb-1">تهران , تولیدی برادران اصلانی</p>
+              <span class="d-inline-block" dir="ltr">+(98)9361025474</span></p>
+            </div>
+            <div class="col-md-6">
+              <dl class="row mb-2">
+                <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
+                  <span class="h4 text-capitalize mb-0 text-nowrap">صورتحساب #</span>
+                </dt>
+                <dd class="col-sm-6 d-flex justify-content-md-end">
+                  <div class="w-px-150">
+                    <input type="text" class="form-control" id="order_code" disabled placeholder="{{factor_id}}"
+                      value="{{factor_id}}" id="invoiceId">
+                  </div>
+                </dd>
+                <dt class="col-sm-6 mb-2 mb-sm-0 pt-1 text-md-end">
+                  <span class="fw-normal">تاریخ:</span>
+                </dt>
+                <dd class="col-sm-6 d-flex justify-content-md-end">
+                  <div class="w-px-150">
+                    <input type="text" class="form-control date-picker" id="factor_date" value=""
+                      placeholder="YYYY/MM/DD">
+                  </div>
+                </dd>
+
+              </dl>
+            </div>
+          </div>
+
+          <hr class="my-4 mx-n4">
+
+          <div class="row p-sm-3 p-0">
+            <div class="col-md-6 col-sm-5 col-12 mb-sm-0 mb-4">
+
+              <h6 class="pb-2">صورتحساب به:</h6>
+              <p class="mb-1">انتخاب مشتری :</p>
+              <div class="col-6">
+                <select class="form-select main mb-2" id="select_costumer">
+                  <option selected="" disabled="">انتخاب مورد</option>
+                  {% for costumer in costumers %}
+                  <option value="{{costumer.id}}">{{costumer.firstname}} {{costumer.lastname}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+            </div>
+            <div class="col-md-6 col-sm-7">
+              <h6 class="pb-2">مشخصات:</h6>
+              <table class="lh-2">
+                <tbody>
+                  <tr>
+                    <td class="pe-3">نام و نام خانوادگی:</td>
+                    <td id="fullname_p"></td>
+                  </tr>
+                  <tr>
+                    <td class="pe-3">شماره تلفن:</td>
+                    <td id="phone_p"></td>
+                  </tr>
+                  <tr>
+                    <td class="pe-3">استان/شهر:</td>
+                    <td id="state_city"></td>
+                  </tr>
+
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <hr class="mx-n4">
+
+          <form class="source-item py-sm-3">
+            <div class="mb-3" data-repeater-list="group-a">
+              <div class="repeater-wrapper pt-0 pt-md-4" data-repeater-item>
+                <div class="d-flex border rounded position-relative pe-0">
+                  <div class="row w-100 m-0 p-3">
+                    <div class="col-md-6 col-12 mb-md-0 mb-3 ps-md-0">
+                      <p class="mb-2 repeater-title">مورد</p>
+
+                      <select class="select2  item-details form-select form-select-lg  mb-2">
+                        <option selected disabled>انتخاب مورد</option>
+
+                        {% for product in products %}
+
+
+                        <option value="{{product.id}}">{{product.title}} کد : {{product.product_code}}</option>
+                        {% endfor %}
+
+                      </select>
+
+                    </div>
+                    <div class="col-md-2 col-12 mb-md-0 mb-3">
+                      <p class="mb-2 repeater-title">قیمت (واحد)</p>
+                      <input type="number" class="form-control invoice-item-price mb-2" disabled value="0" min="12">
+                      <div>
+                        <span>تومان:</span>
+                        <span class="span_price_vahed">0</span>
+
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-12 mb-md-0 mb-3">
+                      <p class="mb-2 repeater-title">تعداد</p>
+                      <input type="number" class="form-control invoice-item-qty" disabled value="0" min="1" max="50">
+                    </div>
+                    <div class="col-md-2 col-12 pe-0">
+                      <p class="mb-2 repeater-title">قیمت (کل)</p>
+                      <p class="mb-0 lh-inherit price">0 تومان</p>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-column align-items-center justify-content-between border-start p-2">
+                    <i class="bx bx-x fs-4 text-muted cursor-pointer" data-repeater-delete></i>
+                    <div class="dropdown">
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <button type="button" class="btn btn-primary" data-repeater-create>افزودن مورد</button>
+              </div>
+            </div>
+          </form>
+
+          <hr class="my-4 mx-n4">
+
+          <div class="row py-sm-3">
+            <div class="col-md-6 mb-md-0 mb-3">
+
+              <form action="{% url 'instalment_app:FactorImageManageMent' %}" class="dropzone"
+                enctype="multipart/form-data" id="dropzone-multii">
+                {% csrf_token %}
+                <div class="dz-message needsclick">
+                  عکس ها را اینجا رها کنید
+                  <span class="note needsclick">(تصویر صورت حساب)</span>
+                </div>
+                <div class="fallback">
+                  <input name="file" type="file">
+                </div>
+              </form>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end">
+              <div class="invoice-calculations lh-2">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="w-px-100">جمع جزء:</span>
+                  <span class="fw-semibold joze">0 تومان</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="w-px-100">تخفیف:</span>
+                  <span class="fw-semibold">0 تومان</span>
+                </div>
+
+                <hr>
+                <div class="d-flex justify-content-between">
+                  <span class="w-px-100">جمع کل:</span>
+                  <span class="fw-semibold total">0 تومان</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% csrf_token %}
+          <hr class="my-4">
+
+          <div class="row">
+            <div class="col-12">
+              <div class="mb-3">
+                <label for="note" class="form-label fw-semibold">توضیحات:</label>
+                <textarea class="form-control" rows="2" id="dis" placeholder="توضیحات صورتحساب"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Invoice Add-->
+
+    <!-- Invoice Actions -->
+    <div class="col-lg-3 col-12 invoice-actions">
+      <hr>
+      <div>
+        <p class="mb-2">روش پرداخت</p>
+        <select class="form-select mb-4 " id="peyment_type">
+          <option value="نقد">نقد</option>
+          <option value="اقساط" selected>اقساط</option>
+          <option value="چک">چک</option>
+          <option value="نسیه">نسیه</option>
+
+        </select>
+
+      </div>
+      <hr>
+      <div class="card mb-4">
+        <div class="card-body">
+
+          <!-- <a href="" class="btn btn-label-secondary d-grid w-100 mb-3" >بازگشت</a> -->
+          <button type="button" data-bs-toggle="modal" data-bs-target="#CheckPeymentModal"
+            class="btn btn-label-secondary d-grid w-100 mb-3">بازگشت</button>
+          <button type="button" class="btn btn-primary d-grid w-100 mb-3" id="CreateFactorBtn">ذخیره</button>
+        </div>
+      </div>
+
+    </div>
+    <!-- /Invoice Actions -->
+  </div>
+
+  <!-- Offcanvas -->
+  <!-- Send Invoice Sidebar -->
+  <div class="offcanvas offcanvas-end" id="sendInvoiceOffcanvas" aria-hidden="true">
+    <div class="offcanvas-header border-bottom">
+      <h6 class="offcanvas-title">ارسال صورتحساب</h6>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <form>
+
+      <div class="offcanvas-body flex-grow-1">
+
+        <div class="mb-3 d-flex flex-wrap">
+          <button type="button" class="btn btn-primary me-3" data-bs-dismiss="offcanvas">ارسال</button>
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">انصراف</button>
+        </div>
+    </form>
+  </div>
+</div>
+<!-- /Send Invoice Sidebar -->
+
+<!-- /Offcanvas -->
+</div>
+
+
+<div class="modal fade" id="CashPeymentModal" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" id="ChashPeymentForm">
+      <div class="modal-header">
+        <h5 class="modal-title" id="backDropModalTitle"></h5>
+
+      </div>
+      <div class="modal-body">
+        <div class="row" id="SummeryForm">
+          <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">شماره کارت مبدا</label>
+            <input type="number" id="nameBackdrop" class="form-control" name="card_numer_origin"
+              placeholder="شماره کارت مبدا">
+          </div>
+          <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">نام صاحب حساب مبدا</label>
+            <input type="text" id="nameBackdrop" class="form-control" name="card_name_origin"
+              placeholder="نام و نام خانوادگی">
+          </div>
+        </div>
+        <input type="hidden" id="order_id">
+        {% csrf_token %}
+
+        <div class="row g-2">
+          <div class="col mb-0">
+            <label class="form-label" for="num_print">مبلغ واریزی</label>
+            <div class="input-group input-group-merge">
+
+              <input type="number" required class="form-control cash_amount" name="amount" placeholder="مبلغ">
+            </div>
+            <span id="cash_amount_span">0 تومان</span>
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col mb-0">
+            <label class="form-label" for="num_print">تخفیف</label>
+            <div class="input-group input-group-merge">
+
+              <input type="number" required class="form-control discount_am" name="discount" placeholder="مبلغ">
+            </div>
+            <span id="discount_span">0 تومان</span>
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md p-4">
+            <small class="text-light fw-semibold d-block">شیوه پرداخت</small>
+            <div class="form-check form-check-inline mt-3">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+              <label class="form-check-label" for="inlineRadio1">حساب ها</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" checked id="inlineRadio2"
+                value="2">
+              <label class="form-check-label" for="inlineRadio2">طرف حساب ها</label>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="row g-2">
+
+          <div class="col mb-0">
+            <label for="emailBackdrop" class="form-label" id="cash_pey_label_id">طرف حساب </label>
+            <select class="select2 form-select mb-2" id="cash_pey_id" name="money_receiver">
+
+              {% for tailor in tailors %}
+              <option value="{{tailor.id}}">{{tailor.first_name}} {{tailor.last_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+          بستن
+        </button>
+        <button type="submit" id="ChashPeymentBtn" class="btn btn-primary">ذخیره</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal fade" id="InstallMentPayForm" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" id="CreateTimeFactorForm" action="{% url 'instalment_app:CreateTimeOrder' %}">
+      <div class="modal-header">
+        <h5 class="modal-title" id="backDropModalTitle">قیمت نهایی این سفارش </h5>
+
+      </div>
+      <div class="modal-body">
+        <div class="row" id="SummeryForm">
+          <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">مقدار تخفیف</label>
+            <input type="text" id="nameBackdrop" class="form-control" name="discount_instalment" placeholder="مقدار تخفیف">
+          </div>
+          <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">تعداد اقساط</label>
+            <input type="number" id="nameBackdrop" class="form-control" name="number_of_peyments" placeholder="تعداد">
+          </div>
+        </div>
+        <input type="hidden" name="factorid" id="fuck_id">
+        <input type="hidden" name="csrfmiddlewaretoken"
+          value="ujrKV4Juq2KnJbghr12JqMkiSAfQwMjF5mgI8cJMBb4pVDSfPpdKGH7GwVpZVAJm">
+        <div class="row g-2">
+          <div class="col mb-0">
+            <label for="emailBackdrop" class="form-label">مقدار پیش پرداخت</label>
+            <input type="text" id="emailBackdrop" name="prepayment" class="form-control" placeholder="مقدار پیش پرداخت">
+          </div>
+          <div class="col mb-0">
+            <label class="form-label" for="num_print">تاریخ پرداخت پیش پرداخت </label>
+            <div class="input-group input-group-merge">
+              <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-window-open'></i></span>
+              <input type="text" class="form-control" name="prepayment_date" placeholder="YYYY/MM/DD"
+                id="flatpickr-date">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+     <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+          بستن
+        </button>
+        <button type="submit" id="InstallMentPayBtn" class="btn btn-primary">ذخیره</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal fade" id="CheckPeymentModal" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content" id="CheckPeymentForm" action="{% url 'instalment_app:CreateTimeOrder' %}">
+      <div class="modal-header">
+        <h5 class="modal-title" id="backDropModalTitle">قیمت نهایی این سفارش </h5>
+
+      </div>
+      <div class="modal-body">
+        <div class="row" id="SummeryForm">
+          <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">مبلغ</label>
+            <input type="number" id="amount_price" class="form-control" name="amount_check" value="0" placeholder="مبلغ">
+            <span id="amount_checkpeyment">0 تومان</span>
+          </div>
+          <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">صادر کننده</label>
+            <input type="text" id="nameBackdrop" class="form-control " name="owner" placeholder="صادر کننده">
+          </div>
+        </div>
+        <div class="row g-2">
+           <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">دریافت کننده</label>
+            <input type="text" id="nameBackdrop" class="form-control " name="check_recaiver" placeholder="دریافت  کننده">
+          </div>
+           <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">تخفیف</label>
+            <input type="number"  class="form-control " id="discount_check" name="discount_check" placeholder="دریافت  کننده">
+          <span id="discount_span_check">0 تومان</span>
+          </div>
+          
+        </div>
+        <input type="hidden" name="factorid" id="factorr_idd">
+        <input type="hidden" name="csrfmiddlewaretoken"
+          value="ujrKV4Juq2KnJbghr12JqMkiSAfQwMjF5mgI8cJMBb4pVDSfPpdKGH7GwVpZVAJm">
+        <div class="row g-2">
+
+          <div class="col mb-0">
+            <label class="form-label" for="num_print">تاریخ سررسید</label>
+            <div class="input-group input-group-merge">
+              <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-window-open'></i></span>
+              <input type="text" class="form-control" name="dead_time" placeholder="YYYY/MM/DD" id="flatpickr-date_2">
+            </div>
+          </div>
+          <div class="col mb-0">
+            <label class="form-label" for="num_print">پیش پرداخت</label>
+            <div class="input-group input-group-merge">
+
+              <input type="number" class="form-control" name="prepeyment" placeholder="پیش پرداخت" id="prepeyment_inp">
+            </div>
+            <span id="prepeyment_span">0 تومان</span>
+          </div>
+
+    </form>
+
+  </div>
+  <div class="row g-2">
+    <div class="col mb-0">
+      <label for="emailBackdrop" class="form-label">تصویر چک</label>
+      <form action="{% url 'instalment_app:CheckImageManager' %}" class="dropzone" enctype="multipart/form-data"
+        id="CheckImage">
+        {% csrf_token %}
+        <div class="dz-message needsclick">
+          عکس را اینجا رها کنید
+          <span class="note needsclick">(تصویر چک)</span>
+        </div>
+        <div class="fallback">
+          <input name="file" type="file">
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col mb-0">
+         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+          بستن
+        </button>
+    <button type="submit" id="CheckPeymentBtn" class="btn btn-primary">ذخیره</button>
+
+  </div>
+</div>
+
+
+</div>
+</div>
+
+
+
+
+{% endblock content %}
+
+
+{% block vendors %}
+{% load static %}
+<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+<script src="{% static 'frest_temp/vendor/libs/autosize/autosize.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-repeater/jquery-repeater.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jdate/jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/l10n/fa-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/pickr/pickr.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/i18n/fa.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-repeater/jquery-repeater.js' %}"></script>
+{% endblock vendors %}
+{% block page_js %}
+{% load static %}
+
+
+<script src="{% static 'frest_temp/ProductiveJs/InstallMantManageMent/FactorManageMent/CreateFactor.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-extras.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-file-upload.js' %}"></script>
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-pickers.js' %}"></script>
+
+<script src="{% static 'frest_temp/js/offcanvas-send-invoice.js' %}"></script>
+
+{% endblock page_js %}
+{% block css %}
+{% load static %}
+<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/pickr/pickr-themes.css' %}">
+
+
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr.css' %}">
+
+<!-- Page CSS -->
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/css/pages/app-invoice.css' %}">
+
+
+<style>
+  .logo-factor {
+    margin-top: -23px;
+    margin-right: 56px;
+    height: 118px;
+    width: 128px;
+    border-radius: 36px;
+  }
+</style>
+{% endblock css %}

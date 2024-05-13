@@ -1,0 +1,224 @@
+{% extends 'Ib7Base.html' %}
+
+
+{% block content %}
+<input type="hidden" id="StateDetail" value="{% url 'instalment_app:StateDetail' %}">
+<input type="hidden" id="doc_images" value="{% url 'instalment_app:DocumentCostumerManageMent' costumer_obj.id %}">
+
+
+
+{% comment %} <div class="d-flex align-items-center justify-content-center h-px-500"> {% endcomment %}
+<div class="container-xxl flex-grow-1 container-p-y">
+       <nav aria-label="breadcrumb" style="display: block;">
+        <ol class="breadcrumb breadcrumb-style2 mb-0">
+          <li class="breadcrumb-item">
+            <a href="javascript:void(0);">خانه</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{% url 'instalment_app:CostumerList' %}">لیست مشتریان</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="javascript:void(0);">ویرایش مشتری {{costumer_obj.firstname}}   {{costumer_obj.lastname}}</a>
+          </li>
+     
+        </ol>
+      </nav>
+  <br>
+
+
+
+
+      <div class="card mb-4">
+        <h5 class="card-header">ویرایش مشتری {{costumer_obj.firstname}}   {{costumer_obj.lastname}}</h5>
+        <form class="card-body "  id="EditCostumerForm" action="{% url 'instalment_app:InstallMentMangeMent' costumer_obj.id %}" >
+          <h6 class="fw-normal">خریدار</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="firstname_id">نام</label>
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-street-view'></i></span>
+                <input type="text" class="form-control" name="firstname" id="firstname_id" value="{{costumer_obj.firstname}}" placeholder="نام" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="lastname_id">نام خانوادگی</label>
+              <div class="input-group input-group-merge">
+                <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-street-view'></i></span>
+                <input type="text" class="form-control" name="lastname" id="lastname_id" value="{{costumer_obj.lastname}}" placeholder=" نام خانوادگی" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+              </div>
+            </div>
+       
+            <div class="col-md-6">
+              <div class="form-password-toggle">
+                <label class="form-label" for="phone_number_id">شماره تلفن </label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bxs-phone'></i></span>
+                  <input type="text" class="form-control" id="phone_number_id" name="phone_number" value="{{costumer_obj.phonenumber}}" placeholder="شماره تلفن" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-password-toggle">
+                <label class="form-label" for="conteract_type_id">نوع قرار داد</label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-carousel' ></i></span>
+                  <input type="text" class="form-control" id="conteract_type_id" name="conteract_type" value="{{costumer_obj.conteract_type}}" placeholder="نوع قرار داد" aria-label="John Doe" aria-describedby="basic-icon-default-fullname2">
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="nameAnimation" class="form-label">استان</label>
+                <select id="states" name="state" class="select2 form-select form-select-lg"  data-allow-clear="true">
+                  <option value="fuck" selected>لطفا یک استان را انتخاب کنید</option>
+                  {% for state in states %}
+                    {% if state.code == costumer_obj.state %}
+                    <option value="{{state.code}}" selected> {{state.name}}</option>
+                    {% else %}
+                    <option value="{{state.code}}" > {{state.name}}</option>
+                    {% endif %}
+                    
+                  {% endfor %}
+                </select>
+  
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="nameAnimation" class="form-label">شهر</label>
+                <select id="cities" name="city"  class="select2 form-select form-select-lg" data-allow-clear="true">
+                  <option value="">لطفا استان خود را انتخاب کنید</option>
+                  <option value="{{costumer_obj.city}}" selected>{{costumer_obj.get_city}}</option>
+     
+                </select>
+              </div>
+            <div class="col-md-6">
+              <div class="form-password-toggle">
+                <label class="form-label" for="num_print">تاریخ قرار داد</label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-window-open'></i></span>
+                  <input type="text" class="form-control"  value="{{costumer_obj.conteract_date}}" name="conteract_date" placeholder="YYYY/MM/DD" id="flatpickr-date">
+                </div>
+              </div>
+            </div>
+            {% csrf_token %}
+            <div class="col-md-6">
+              <div class="form-password-toggle">
+                <label class="form-label" for="shortage">آدرس کامل</label>
+                <div class="input-group input-group-merge">
+                 
+                  <textarea class="form-control" id="tozihgat"  name="discription"  placeholder="آدرس کامل" rows="3">{{costumer_obj.discription}}</textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="col-sm-6">
+            <label for="" class="form-label">مدارک مشتری </label>
+            <form action="{% url 'instalment_app:DocumentCostumerManageMent'  costumer_obj.id %}" class="dropzone"   enctype="multipart/form-data" id="dropzone-multii">
+              {% csrf_token %}
+              <div class="dz-message needsclick">
+                عکس ها را اینجا رها کنید
+                <span class="note needsclick">(آپلود مدارک)</span>
+              </div>
+              <div class="fallback">
+                <input name="file" type="file">
+              </div>
+            </form>
+            <hr>
+            <div class="row" id="docs_images">
+              {% for image in costumer_obj.documnent.all %}
+              <div class="col-md-3" id="img_{{image.id}}">
+           
+                <img src="{{image.file_image.url}}" alt="" height="100px" width="100px">
+                <br>
+                <br>
+                  <div class="col-sm-9 text-center">
+
+                    <button type="button" onclick="delete_image_exsit({{image.id}})" class="btn btn-icon rounded-pill btn-google-plus">
+                      <i class='bx bx-trash-alt'></i>
+                    </button>            
+                  </div>
+              </div>
+        
+              
+              
+          
+              {% endfor %}
+            </div>
+         
+          </div>
+          
+          
+            
+     
+              
+            
+         
+          
+
+
+     
+     
+            <div class="pt-4">
+              <button type="submit" class="btn btn-primary me-sm-3 me-1"  id="EditCostumerBtn" >ثبت</button>
+              <a href="{% url 'instalment_app:CostumerList' %}" class="btn btn-label-secondary">انصراف</a>
+            </div>
+
+        
+
+     
+  </div>
+
+{% endblock content %}
+
+
+{% block vendors %}
+{% load static %}
+
+<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jdate/jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/l10n/fa-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/pickr/pickr.js' %}"></script>
+{% endblock vendors %}
+{% block css %}
+{% load static %}
+<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/pickr/pickr-themes.css' %}">
+{% endblock css %}
+
+{% block page_js %}
+{% load static %}
+
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ProductiveJs/InstallMantManageMent/CostumerManageMent/EditCostumer.js' %}"></script>
+<!-- page js -->
+
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-pickers.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+{% endblock page_js %}

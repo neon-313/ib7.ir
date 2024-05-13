@@ -1,0 +1,268 @@
+{% extends 'Ib7Base.html' %}
+{% block content %}
+<input type="hidden" id="QuestionData" value="{% url 'ShopManageMentUrl:ManyQuestionManagr' %}">
+<input type="hidden" id="QuestionManager" value="{% url 'ShopManageMentUrl:QuestionManager' %}">
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Layout Demo -->
+    <br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style2 mb-0">
+            <li class="breadcrumb-item">
+                <a href="{% url 'HomePageUrl:HomePage' %}">خانه</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">مدیریت محصولات</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0);">لیست سوالات متداول</a>
+            </li>
+
+
+        </ol>
+    </nav>
+    <br>
+    <div class="card">
+        <div class="modal fade" id="CreateQuestion" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                <div class="modal-content p-3 p-md-5">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4 mt-0 mt-md-n2">
+                            <h3 class="secondary-font">ثبت گروه سوال ها</h3>
+
+                        </div>
+                        <form id="QuestionForm" class="row g-3" onsubmit="return false">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                <label class="form-label" for="modalEditUserName">عنوان گروه سوال</label>
+                                <input type="text" id="modalEditUserName" name="QuestionGroupName"
+                                    class="form-control text-start" placeholder="عنوان" dir="ltr">
+                            </div>
+
+                        </form>
+                        <form class="form-repeater">
+                            <div data-repeater-list="group-a">
+                                <div data-repeater-item class="question_group">
+                                    <div class="row">
+                                        <div class="col-12 col-md-5">
+                                            <label class="form-label" for="form-repeater-1-1">عنوان سوال</label>
+                                            <input type="text" id="form-repeater-1-1"
+                                                class="form-control text-start question" placeholder="سوال؟" dir="ltr">
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label class="form-label" for="form-repeater-1-2">جواب سوال</label>
+                                            <input type="text" id="form-repeater-1-2"
+                                                class="form-control text-start answer" placeholder="!جواب" dir="ltr">
+                                        </div>
+
+                                        <div class="col-12 col-md-2">
+                                            <button class="btn btn-label-danger mt-4" data-repeater-delete>
+                                                <i class="bx bx-x me-1"></i>
+
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="mb-0">
+                                <button class="btn btn-primary" data-repeater-create>
+                                    <i class="bx bx-plus me-1"></i>
+                                    <span class="align-middle">سوال جدید</span>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                                id="CreateQuestionGroupBtn">ثبت</button>
+                            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                انصراف
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-header ">
+            <h5 style="float:right;">لیست سوالات متداول</h5>
+            <button type="button" class="btn rounded-pill btn-secondary" data-bs-toggle="modal"
+                data-bs-target="#CreateQuestion" style="float:left;">ایجاد مورد جدید <i
+                    class='bx bx-user-plus bx-tada'></i></button>
+        </div>
+
+        <div class="card-datatable text-nowrap">
+            <table class="dt-scrollableTable table table-bordered">
+                <thead>
+                    <tr>
+                        <th>شناسه</th>
+                        <th>عنوان</th>
+
+
+
+
+                        <th>عمل</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    {% for question in questions %}
+    <div class="modal fade" id="EditQuestion_{{question.id}}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+            <div class="modal-content p-3 p-md-5">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center mb-4 mt-0 mt-md-n2">
+                        <h3 class="secondary-font">ویرایش گروه سوال ها</h3>
+
+                    </div>
+                    <form id="QuestionForm_{{question.id}}" class="row g-3" onsubmit="return false">
+                        {% csrf_token %}
+                        <div class="col-12">
+                            <label class="form-label" for="modalEditUserName">عنوان گروه سوال</label>
+                            <input type="text" id="modalEditUserName" name="QuestionGroupNameEdit_{{question.id}}" value="{{question.title}}"
+                                class="form-control text-start" placeholder="عنوان" dir="ltr" >
+                        </div>
+
+                    </form>
+                    <span>سوال های موجود</span>
+                    <hr>
+                    {% for main_quest in question.quest.all %}
+                      
+                    <div class="row" id="row_quest_{{main_quest.id}}">
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="form-repeater-1-1">عنوان سوال</label>
+                            <input type="text" id="form-repeater-1-1"
+                                class="form-control text-start question" name="quest_{{main_quest.id}}" value="{{main_quest.quest}}" placeholder="سوال؟" dir="ltr">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="form-repeater-1-2">جواب سوال</label>
+                            <input type="text" id="form-repeater-1-2" value="{{main_quest.answer}}"
+                                class="form-control text-start answer" name="answer_{{main_quest.id}}" placeholder="!جواب" dir="ltr">
+                        </div>
+
+                        <div class="col-12 col-md-1">
+                            <button class="btn btn-secondary btn-danger mt-4" onclick="DeleteQuest({{main_quest.id}})">
+                                <i class="bx bx-x me-1"></i>
+
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-1">
+                            <button class="btn btn-secondary btn-success mt-4" onclick="EditQuest({{main_quest.id}})">
+                                <i class='bx bx-loader-alt'></i>
+
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <hr>
+                    <div id="csrf">
+                        {% csrf_token %}
+                    </div>
+                    <span>ثبت سوال جدید</span>
+                    <hr>
+                    <form class="form-repeater">
+                        <div data-repeater-list="group-a">
+                            <div data-repeater-item class="question_group_edit_{{question.id}}">
+                                <div class="row">
+                                    <div class="col-12 col-md-5">
+                                        <label class="form-label" for="form-repeater-1-1">عنوان سوال</label>
+                                        <input type="text" id="form-repeater-1-1"
+                                            class="form-control text-start question" placeholder="سوال؟" dir="ltr">
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        <label class="form-label" for="form-repeater-1-2">جواب سوال</label>
+                                        <input type="text" id="form-repeater-1-2"
+                                            class="form-control text-start answer" placeholder="!جواب" dir="ltr">
+                                    </div>
+
+                                    <div class="col-12 col-md-2">
+                                        <button class="btn btn-label-danger mt-4" data-repeater-delete>
+                                            <i class="bx bx-x me-1"></i>
+
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="mb-0">
+                            <button class="btn btn-primary" data-repeater-create>
+                                <i class="bx bx-plus me-1"></i>
+                                <span class="align-middle">سوال جدید</span>
+                            </button>
+                        </div>
+                    </form>
+                    <hr>
+                    <div class="col-12 text-center mt-4">
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1"
+                            onclick="EditQuestionGroup({{question.id}})">ثبت</button>
+                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <!--/ Layout Demo -->
+</div>
+{% endblock content %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet"
+    href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+{% endblock css %}
+{% block page_js %}
+{% load static %}
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ShopJs/ShopManageMent/ShopSection/ManyQuestion.js' %}"></script>
+
+<!-- page js -->
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-extras.js' %}"></script>
+
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+{% endblock page_js %}
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/jquery-repeater/jquery-repeater.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendors %}

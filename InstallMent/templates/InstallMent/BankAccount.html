@@ -1,0 +1,186 @@
+{% extends 'Ib7Base.html' %}
+{% block content %}
+<input type="hidden" id="getbankdata" value="{% url 'instalment_app:BankAccountManageMent' %}" >
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Layout Demo -->
+    <br>
+    <nav aria-label="breadcrumb" >
+        <ol class="breadcrumb breadcrumb-style2 mb-0">
+          <li class="breadcrumb-item">
+            <a href="javascript:void(0);">خانه</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="javascript:void(0);">لیست حساب های بانکی</a>
+          </li>
+     
+        </ol>
+      </nav>
+      <br>
+      <div class="card">
+      
+        <div class="card-header ">
+          <h5  style="float:right;">لیست حساب های بانکی</h5>
+          <button  type="button"  data-bs-toggle="modal" data-bs-target="#modalCenter"
+               class="btn rounded-pill btn-secondary" style="float:left;">ایجاد مورد جدید <i class='bx bx-user-plus bx-tada' ></i></button>
+        </div>
+
+        <div class="card-datatable text-nowrap">
+          <table class="dt-scrollableTable table table-bordered">
+            <thead>
+              <tr>
+                <th>شناسه</th>
+                <th>عنوان</th>
+                <th>نام صاحب حساب</th>
+                <th>شماره حساب</th>
+             
+          
+                <th>عمل</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    <!--/ Layout Demo -->
+  </div>
+  <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title secondary-font" id="modalCenterTitle">ثبت حساب جدید</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'instalment_app:BankAccountManageMent' %}" id="CreateBankAccountForm">
+        <div class="modal-body">
+          <div class="row">
+            
+          </div>
+          <div class="row g-2">
+            <div class="col mb-0">
+              <label for="emailWithTitle" class="form-label">عنوان</label>
+              <input type="text" id="title_id" name="title" class="form-control text-start" placeholder="عنوان" dir="ltr">
+            </div>
+            <div class="col mb-0">
+                <label for="emailWithTitle" class="form-label">نام صاحب حساب</label>
+                <input type="text" id="accountt_owner_id" name="account_owner" class="form-control text-start" placeholder="نام صاحب حساب" dir="ltr">
+            </div>
+            {% csrf_token %}
+         
+          </div>
+          <div class="row g-2">
+            <div class="col mb-0">
+                <label for="emailWithTitle" class="form-label">شماره حساب</label>
+                <input type="number" id="account_number_id" name="account_number" class="form-control text-start" placeholder="شماره حساب" dir="ltr">
+            </div>
+         
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+            بستن
+          </button>
+          <button type="submit" class="btn btn-primary" id="CreateBankAccountBtn">ذخیره تغییرات</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+  {% for bank_obj in bank_objs %}
+    
+  
+  
+  
+  <div class="modal fade" id="EditBankAccModal_{{bank_obj.id}}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title secondary-font" id="modalCenterTitle">ثبت حساب جدید</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'instalment_app:BankAccountManageMent' bank_obj.id %}" id="EditBankAccForm">
+        <div class="modal-body">
+          <div class="row">
+            {% csrf_token %}
+          </div>
+           <input type="hidden" id="bank_id" value="{{bank_obj.id}}">
+          <div class="row g-2">
+            <div class="col mb-0">
+              <label for="emailWithTitle" class="form-label">عنوان</label>
+              <input type="text" id="title_id" name="title" value="{{bank_obj.title}}" class="form-control text-start" placeholder="عنوان" dir="ltr">
+            </div>
+            <div class="col mb-0">
+                <label for="emailWithTitle" class="form-label">نام صاحب حساب</label>
+                <input type="text" id="accountt_owner_id" name="account_owner" value="{{bank_obj.account_owner}}" class="form-control text-start" placeholder="نام صاحب حساب" dir="ltr">
+            </div>
+         
+          </div>
+          <div class="row g-2">
+            <div class="col mb-0">
+                <label for="emailWithTitle" class="form-label">شماره حساب</label>
+                <input type="number" id="account_number_id" name="account_number" value="{{bank_obj.account_number}}" class="form-control text-start" placeholder="شماره حساب" dir="ltr">
+            </div>
+         
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+            بستن
+          </button>
+          <button type="submit" class="btn btn-primary" id="CreateBankAccountBtn_{{bank_obj.id}}">ذخیره تغییرات</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endblock content %}
+
+  {% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+{% endblock css %}
+{% block page_js %}
+{% load static %}
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ProductiveJs/BankAccount.js' %}"></script>
+<!-- page js -->
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+{% endblock page_js %}
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendors %}

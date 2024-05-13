@@ -1,0 +1,526 @@
+{% extends 'Ib7Base.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <br>
+<nav aria-label="breadcrumb" >
+  <ol class="breadcrumb breadcrumb-style2 mb-0">
+    <li class="breadcrumb-item">
+      <a href="javascript:void(0);">خانه</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{% url 'instalment_app:FactorList' %}">لیست صورت حساب ها</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="javascript:void(0);">جزییات صورت حساب با کد {{factor_obj.order_code}}</a>
+    </li>
+
+  </ol>
+</nav>
+<br>
+    <div class="row invoice-preview">
+      <!-- Invoice -->
+      <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
+        <div class="card invoice-preview-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column p-sm-3 p-0">
+              <div class="mb-xl-0 mb-4">
+                <div class="d-flex align-items-center svg-illustration mb-3 gap-2">
+                  <img src="{% static "frest_temp/img/main_logo.jpg" %}"  style="width: 84px;height: 83px;" alt="">
+
+
+                </div>
+                <p class="mb-1">تهران , تولیدی برادران اصلانی</p>
+                <p class="mb-0"><span class="d-inline-block" dir="ltr">09361025474</span> </p>
+              </div>
+              <div>
+                <h4>صورتحساب #{{factor_obj.order_code}}</h4>
+                <div class="mb-2 lh-1-85">
+                  <span class="me-1">تاریخ صدور:</span>
+                  <span class="fw-semibold">{{factor_obj.persian_date}}</span>
+                </div>
+                <div class="mb-2 lh-1-85">
+                  <span class="me-1">روش پرداخت:</span>
+                  <span class="fw-semibold">{{factor_obj.peyment_type}}</span>
+                </div>
+          
+              </div>
+            </div>
+          </div>
+          <hr class="my-0">
+          <div class="card-body">
+            <div class="row p-sm-3 p-0">
+              <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0 mb-4">
+                <h6 class="pb-2">جزییات خریدار</h6>
+                <p class="mb-1">{{factor_obj.costumer.firstname}}  {{factor_obj.costumer.lastname}}</p>
+                <p class="mb-1">استان :{{factor_obj.costumer.get_state}}</p>
+                <p class="mb-1">شهر : {{factor_obj.costumer.get_city}}</p>
+                <p class="mb-1">شماره تلفن : {{factor_obj.costumer.phonenumber}}</p>
+                <p class="mb-0">آدرس : {{factor_obj.costumer.discription}}</p>
+              </div>
+              <div class="col-xl-6 col-md-12 col-sm-7 col-12">
+                
+                {% if factor_obj.peyment_type == "اقساط" or factor_obj.peyment_type == None  %}
+                  
+                
+                  
+                <h6 class="pb-2">اقساط  :</h6>
+                <table class="lh-2">
+                  <tbody>
+                    {% for peyment in  peyment_objs %}
+                   
+                    <tr >
+                      
+                      
+                      <td class="pe-3">{{peyment.year}}/{{peyment.month}}/{{peyment.day}}</td>
+                      
+                      <td><span class="mySpan">{{peyment.price}} تومان</span></td>
+                      <td class="pe-3" style="padding: 18px !important;">
+                        {% if peyment.is_payed  %}
+                          
+                        تاریخ وصول : {{peyment.peyed_date}}
+                        {% else %}
+                        <button type="button"  class="btn rounded-pill btn-icon btn-label-primary"  data-bs-toggle="modal" data-bs-target="#modalCenter{{peyment.id}}">
+                          <i class='bx bx-money'></i>
+                        </button>
+                      
+                        {% endif %}
+                      </td>
+                    </tr>
+                    <div class="modal fade" id="modalCenter{{peyment.id}}" tabindex="-1" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title secondary-font" id="modalCenterTitle">ثبت تاریخ وصول اقساط</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <form id="CreatePayed{{peyment.id}}" action="{% url 'instalment_app:CreatePeymentPayed' peyment.id %}">
+                            <div class="row">
+
+                              {% csrf_token %}
+                              <div class="col mb-3">
+                                <label for="nameWithTitle" class="form-label">تاریخ وصول</label>
+                                <input type="text" class="form-control" name="prepayment_date{{peyment.id}}" placeholder="YYYY/MM/DD" id="flatpickr-date_{{peyment.count}}">
+                                <input type="hidden" name="peyment_id" value="{{peyment.id}}">
+                              </div>
+                            </div>
+                          </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                              بستن
+                            </button>
+                            <button type="button" onclick="IsPayed({{peyment.id}})" class="btn btn-primary">ذخیره تغییرات</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+              
+               
+                  </tbody>
+                </table>
+                {% elif factor_obj.peyment_type == "نقد" %}
+                <h6 class="pb-2"> پرداخت نقدی:</h6>
+                <p class="mb-1">نام پرداخت کنند : {{factor_obj.cash_peyment_detail.card_name_origin}}</p>
+                <p class="mb-1">شماره کارت پرداخت کنده :{{factor_obj.cash_peyment_detail.card_numer_origin}}</p>
+                <h6 class="pb-2"> اطلاعات دریافت کننده:</h6>
+                <p class="mb-1">نام و نام خانوادگی: {{factor_obj.cash_peyment_detail.tailor_detail.first_name}}  {{factor_obj.cash_peyment_detail.tailor_detail.last_name}}</p>
+                <p class="mb-1">شماره تلفن:{{factor_obj.cash_peyment_detail.tailor_detail.phone}}</p>
+                {% elif  factor_obj.peyment_type == 'چک' %}
+                <h6 class="pb-2"> پرداخت چکی:</h6>
+                <p class="mb-1">دریافت کننده : {{factor_obj.check_peyment_detail.check_owner}}</p>
+                <p class="mb-1">تاریخ سررسید:{{factor_obj.check_peyment_detail.dead_time}}</p>
+                <p class="mb-1">مبلغ:{{factor_obj.check_peyment_detail.amount}}</p>
+                <p class="mb-1">
+                  
+                  <a href="{{factor_obj.check_peyment_detail.image}}" target="_blank" rel="noopener noreferrer">  تصویر چک</a>
+                
+                </p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table border-top m-0">
+              <thead>
+                <tr>
+                  <th>نام</th>
+                  <th>تصویر</th>
+                  <th>قیمت(واحد)</th>
+                  <th>تعداد</th>
+                  <th></th>
+                  <th>قیمت کل</th>
+          
+                </tr>
+              </thead>
+              <tbody>
+                {% for product in factor_obj.products.all %}
+                  
+      
+                <tr>
+                  <td class="text-nowrap">{{product.main_product.title}}</td>
+                  <td class="text-nowrap">
+                    
+                    {% if product.main_product.main_image %}
+                      <img src="{{product.main_product.main_image.url}}" alt="" width="50px" height="50px">
+                    {% endif %}
+                      
+                  </td>
+                  <td class="text-nowrap"> <span class="mySpan">{{product.price}}</span>  </td>
+                  <td>{{product.numbers}}</td>
+                  <td></td>
+                  <td> <span class="mySpan">{{product.total_price}}</span>   تومان</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                  <td colspan="3" class="align-top px-4 py-5">
+                    <p class="mb-2">
+                      <span class="me-1 fw-semibold">فروشنده:</span>
+                      <span>Ib7.ir</span>
+                    </p>
+                    <span>با تشکر از کسب و کار شما</span>
+                  </td>
+                  
+                  {% if factor_obj.peyment_type  == 'اقساط' or factor_obj.peyment_type  == None %}
+                    
+              
+                    
+                  <td class="text-end px-4 py-5">
+                    <p class="mb-2">جمع جزء:</p>
+                    <p class="mb-2">تخفیف:</p>
+                    <p class="mb-2">پیش پرداخت:</p>
+                    <p class="mb-0">مانده فاکتور:</p>
+                  </td>
+                  <td class="px-4 py-5">
+                    <p class="fw-semibold mb-2"> <span class="mySpan">{{factor_obj.total_price_method}} تومان</span> </p>
+                    <p class="fw-semibold mb-2"> <span class="mySpan">{{factor_obj.takhfif}} تومان</span> </p>
+                    <p class="fw-semibold mb-2"> <span class="mySpan">{{factor_obj.pish_pardakht}} تومان</span> </p>
+                    <p class="fw-semibold mb-0"> <span class="mySpan">{{factor_obj.kol_price}} تومان</span> </p>
+                  </td>
+                  {% elif  factor_obj.peyment_type  == 'نقد' %}
+                  <td class="text-end px-4 py-5">
+                    <p class="mb-2">جمع کل:</p>
+                    <p class="mb-2">تخفیف:</p>
+                    <p class="mb-2">مبلغ پرداختی:</p>
+                    <p class="mb-0">مانده فاکتور:</p>
+                  </td>
+                  <td class="px-4 py-5">
+                    <p class="fw-semibold mb-2"> <span class="mySpan">{{factor_obj.final_price}} تومان</span> </p>
+                    <p class="fw-semibold mb-2"> <span class="mySpan">0 تومان</span> </p>
+                    <p class="fw-semibold mb-2"> <span class="mySpan">{{factor_obj.cash_peyment_detail.amount}} تومان</span> </p>
+                    <p class="fw-semibold mb-0"> <span class="mySpan">{{factor_obj.khalesi_chash_pey}} تومان</span> </p>
+                  </td>
+                  {% elif factor_obj.peyment_type == 'چک' %}
+                  <td class="text-end px-4 py-5">
+                    <p class="mb-2">جمع کل:</p>
+                    <p class="mb-2">تخفیف:</p>
+                    <p class="mb-2">مبلغ پرداختی:</p>
+                    <p class="mb-0">مانده فاکتور:</p>
+                  </td>
+                  <td class="px-4 py-5">
+                    <p class="fw-semibold mb-2"> <span class="mySpan">{{factor_obj.final_price}} تومان</span> </p>
+                    <p class="fw-semibold mb-2"> <span class="mySpan">0 تومان</span> </p>
+                    <p class="fw-semibold mb-2"> <span class="mySpan">{{factor_obj.check_peyment_detail.amount}} تومان</span> </p>
+                    <p class="fw-semibold mb-0"> <span class="mySpan">{{factor_obj.khalesi_check_pey}} تومان</span> </p>
+                  </td>
+
+                  {% endif %}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 lh-1-85">
+                <span class="fw-semibold">توضیحات:</span>
+                <span>{{factor_obj.dis}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /Invoice -->
+
+      <!-- Invoice Actions -->
+      <!-- <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+        <div class="card">
+          <div class="card-body">
+            <button class="btn btn-primary d-grid w-100 mb-3" data-bs-toggle="offcanvas" data-bs-target="#sendInvoiceOffcanvas">
+              <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="bx bx-paper-plane bx-xs me-3"></i>ارسال صورتحساب</span>
+            </button>
+            <button class="btn btn-label-secondary d-grid w-100 mb-3">دریافت</button>
+            <a class="btn btn-label-secondary d-grid w-100 mb-3" target="_blank" href="./app-invoice-print.html">
+              چاپ
+            </a>
+            <a href="./app-invoice-edit.html" class="btn btn-label-secondary d-grid w-100 mb-3">
+              ویرایش صورتحساب
+            </a>
+            <button class="btn btn-primary d-grid w-100" data-bs-toggle="offcanvas" data-bs-target="#addPaymentOffcanvas">
+              <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="bx bx-dollar bx-xs me-3"></i>افزودن پرداخت</span>
+            </button>
+          </div>
+        </div>
+      </div> -->
+      <!-- /Invoice Actions -->
+    </div>
+
+    <!-- Offcanvas -->
+    <!-- Send Invoice Sidebar -->
+    <div class="offcanvas offcanvas-end" id="sendInvoiceOffcanvas" aria-hidden="true">
+      <div class="offcanvas-header border-bottom">
+        <h6 class="offcanvas-title">ارسال صورتحساب</h6>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body flex-grow-1">
+        <form>
+          <div class="mb-3">
+            <label for="invoice-from" class="form-label">از</label>
+            <input type="text" class="form-control" id="invoice-from" value="shelbyComapny@email.com" placeholder="company@email.com">
+          </div>
+          <div class="mb-3">
+            <label for="invoice-to" class="form-label">به</label>
+            <input type="text" class="form-control" id="invoice-to" value="qConsolidated@email.com" placeholder="company@email.com">
+          </div>
+          <div class="mb-3">
+            <label for="invoice-subject" class="form-label">موضوع</label>
+            <input type="text" class="form-control" id="invoice-subject" value="صورتحساب خرید قالب مدیریت" placeholder="موضوع مرتبط با صورتحساب">
+          </div>
+          <div class="mb-3">
+            <label for="invoice-message" class="form-label">پیام</label>
+            <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="8">
+لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای</textarea>
+          </div>
+          <div class="mb-4">
+            <span class="badge bg-label-primary">
+              <i class="bx bx-link bx-xs"></i>
+              <span class="align-middle">صورتحساب پیوست شده</span>
+            </span>
+          </div>
+          <div class="mb-3 d-flex flex-wrap">
+            <button type="button" class="btn btn-primary me-3" data-bs-dismiss="offcanvas">ارسال</button>
+            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">انصراف</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- /Send Invoice Sidebar -->
+    <!-- Add Payment Sidebar -->
+    <div class="offcanvas offcanvas-end" id="addPaymentOffcanvas" aria-hidden="true">
+      <div class="offcanvas-header border-bottom">
+        <h6 class="offcanvas-title">افزودن پرداخت</h6>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body flex-grow-1">
+        <div class="d-flex justify-content-between bg-lighter p-2 mb-3">
+          <p class="mb-0">مبلغ صورتحساب:</p>
+          <p class="fw-bold mb-0">5,000,000 تومان</p>
+        </div>
+        <form>
+          <div class="mb-3">
+            <label class="form-label" for="invoiceAmount">مقدار پرداخت</label>
+            <div class="input-group">
+              <span class="input-group-text">تومان</span>
+              <input type="text" id="invoiceAmount" name="invoiceAmount" class="form-control invoice-amount text-start" dir="ltr" placeholder="100">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="payment-date">تاریخ پرداخت</label>
+            <input id="payment-date" class="form-control invoice-date" type="text">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="payment-method">نحوه پرداخت</label>
+            <select class="form-select" id="payment-method">
+              <option value="" selected disabled>انتخاب نحوه پرداخت</option>
+              <option value="Cash">نقدی</option>
+              <option value="Bank Transfer">انتقال بانکی</option>
+              <option value="Debit Card">کارت Debit</option>
+              <option value="Credit Card">کارت اعتباری</option>
+              <option value="Paypal">پی‌پال</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="payment-note">یادداشت پرداخت</label>
+            <textarea class="form-control" id="payment-note" rows="2"></textarea>
+          </div>
+          <div class="mb-3 d-flex flex-wrap">
+            <button type="button" class="btn btn-primary me-3" data-bs-dismiss="offcanvas">ارسال</button>
+            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">انصراف</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- /Add Payment Sidebar -->
+    <!-- /Offcanvas -->
+  </div>
+{% endblock content %}
+
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jdate/jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/l10n/fa-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/autosize/autosize.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/pickr/pickr.js' %}"></script>
+{% endblock vendors %}
+
+
+{% block css %}
+{% load static %}
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr.css' %}">
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/pickr/pickr-themes.css' %}">
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+
+    <link rel="stylesheet" href="{% static 'frest_temp/vendor/css/pages/app-invoice.css' %}">
+
+    
+{% endblock css %}
+
+
+{% block page_js %}
+{% load static %}
+<script type="text/javascript">
+
+function ToRial(str) {
+ 
+ str = str.replace(/\,/g, '');
+     var objRegex = new RegExp('(-?[0-9]+)([0-9]{3})');
+  
+     while (objRegex.test(str)) {
+         str = str.replace(objRegex, '$1,$2');
+     }
+  
+     return str;
+ }
+
+// دریافت تمام عناصر با کلاس mySpan
+var spans = $(".mySpan");
+
+// تغییر متن همه عناصر
+spans.each(function() {
+  var spanText = $(this).text();
+  // انجام عملیات تبدیل مورد نیاز به متن
+  // مثلاً تقسیم به دسته‌های ۳ رقمی
+  var transformedText = ToRial(spanText) // اعمال تبدیل مورد نظر
+  $(this).text(transformedText);
+});
+
+
+  function ChekPayed(peyment_id,chekbox){
+    if (chekbox.checked){
+      $.ajax({
+        url:"/InstallMent/is_payed_peyments" + `/${peyment_id}`,
+        method:"GET",
+        data:{status:true}
+      })
+    }else{
+      $.ajax({
+        url:"/InstallMent/is_payed_peyments" + `/${peyment_id}`,
+        method:"GET",
+        data:{status:false}
+      })
+
+
+    }
+  }
+  function IsPayed(peyment_id){
+    const form = $(`#CreatePayed${peyment_id}`)
+    var request_url = $(`#CreatePayed${peyment_id}`).attr("action")
+    var isFormValid = true;
+    var inp = $(`input[name="prepayment_date${peyment_id}"]`).val()
+    console.log(inp)
+    if (inp === '') {
+      isFormValid = false;
+      
+    }
+
+    if(isFormValid){
+
+      Swal.fire({
+      title: 'هشدار!',
+      text: ' آیا از وصول این قسط اطمینان دارید؟؟',
+      icon: 'warning',
+      showCancelButton: true,
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-danger'
+      },
+      cancelButtonText: "نه , لغو",
+      confirmButtonText: 'باشه',
+      buttonsStyling: false,
+    }).then(function (result) {
+      if (result.value) {
+        $.ajax({
+          url:request_url,
+          method:"POST",
+          data:form.serialize(),
+          success: function(response) {
+            Swal.fire({
+              title: 'موفق',
+              text: "تاریخ وصول با موفقیت ثبت شد",
+              icon: 'success',
+              customClass: {
+                confirmButton: 'btn btn-primary'
+              },
+              confirmButtonText: 'باشه',
+              buttonsStyling: false
+      
+            }).then(function (result) {
+              location.reload();
+            })
+          
+        },
+        })
+      };
+    })
+    }else{
+      Swal.fire({
+            title:"هشدار",
+            text: "لطفا تاریخ وصول را وارد کنید",
+            icon: 'error',
+            customClass: {
+              confirmButton: 'btn btn-primary'
+            },
+            confirmButtonText: 'باشه',
+            buttonsStyling: false
+          });
+    }
+  };
+</script>
+
+<script src="{% static 'frest_temp/js/offcanvas-add-payment.js' %}"></script>
+<script src="{% static 'frest_temp/js/offcanvas-send-invoice.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-extras.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-file-upload.js' %}"></script>
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-pickers.js' %}"></script>
+{% endblock page_js %}

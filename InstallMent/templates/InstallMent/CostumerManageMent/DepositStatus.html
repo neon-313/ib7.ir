@@ -1,0 +1,492 @@
+{% extends 'Ib7Base.html' %}
+{% block content %}
+<input type="hidden" id="GetDepositData" value="{% url 'instalment_app:DepositManageMent' costumer_obj.id %}">
+<input type="hidden" id="GetDepositData2" value="{% url 'instalment_app:DepositManageMent' %}">
+<div class="container-xxl flex-grow-1 container-p-y">
+  <!-- Layout Demo -->
+  <br>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style2 mb-0">
+      <li class="breadcrumb-item">
+        <a href="javascript:void(0);">خانه</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'instalment_app:CostumerList' %}">لیست مشتری ها</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="javascript:void(0);">لیست وضعیت واریزی های {{costumer_obj.firstname}} {{costumer_obj.lastname}}</a>
+      </li>
+
+    </ol>
+  </nav>
+
+  <div class="modal fade" id="twoFactorAuth" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-simple">
+      <div class="modal-content p-3 p-md-5">
+        <div class="modal-body">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-4 mt-0 mt-md-n2">
+            <h3 class="mb-2 secondary-font">انتخاب روش پرداخت</h3>
+            <p class="text-muted">
+              روش پرداختی که برای این واریزی نیاز دارید را انتحاب کنید
+            </p>
+          </div>
+          <div class="row">
+            <div class="col-12 mb-3">
+              <div class="form-check custom-option custom-option-basic">
+                <label class="form-check-label custom-option-content ps-3" for="customRadioTemp1"
+                  data-bs-target="#twoFactorAuthOne" data-bs-toggle="modal">
+                  <input name="customRadioTemp" class="form-check-input d-none" type="radio" value=""
+                    id="customRadioTemp1">
+                  <span class="d-flex align-items-start">
+                    <i class='bx bx-money bx-md me-3 mt-1'></i>
+                    <span>
+                      <span class="custom-option-header">
+                        <span class="h4 mb-2">پرداخت نقدی</span>
+                      </span>
+                      <span class="custom-option-body">
+
+                      </span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-check custom-option custom-option-basic">
+                <label class="form-check-label custom-option-content ps-3" for="customRadioTemp2"
+                  data-bs-target="#twoFactorAuthTwo" data-bs-toggle="modal">
+                  <input name="customRadioTemp" class="form-check-input d-none" type="radio" value=""
+                    id="customRadioTemp2">
+                  <span class="d-flex align-items-start">
+                    <i class='bx bxs-bank bx-md me-3 mt-1'></i>
+
+                    <span>
+                      <span class="custom-option-header">
+                        <span class="h4 mb-2">پرداخت با چک</span>
+                      </span>
+                      <span class="custom-option-body">
+
+                      </span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chash Deposit -->
+  <div class="modal fade" id="twoFactorAuthOne" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-simple">
+      <div class="modal-content p-3 p-md-5">
+        <div class="modal-body">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-4 mt-0 mt-md-n2">
+            <h3 class="secondary-font">ثبت واریزی جدید</h3>
+          </div>
+          <form id="CreateDepositForm" class="row g-3"
+            action="{% url 'instalment_app:DepositManageMent' costumer_obj.id %}">
+
+
+            {% csrf_token %}
+           
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="modalEditUserFirstName">مبلغ واریزی</label>
+              <input type="number" id="modalEditUserFirstName" required name="deposit_price" class="form-control"
+                placeholder="مبلغ واریزی">
+
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="flatpickr-date">تاریخ</label>
+              <input type="text" id="flatpickr-date" name="deposit_date" required class="form-control"
+                placeholder="تاریخ">
+            </div>
+            <input type="hidden" name="peyment_type" value="نقد">
+            <div class="row g-2">
+              <div class="col-md p-4">
+                <small class="text-light fw-semibold d-block">شیوه پرداخت</small>
+                <div class="form-check form-check-inline mt-3">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                  <label class="form-check-label" for="inlineRadio1">حساب ها</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" checked id="inlineRadio2"
+                    value="2">
+                  <label class="form-check-label" for="inlineRadio2">طرف حساب ها</label>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="row g-2">
+
+              <div class="col mb-0">
+                <label for="emailBackdrop" class="form-label" id="cash_pey_label_id">طرف حساب </label>
+                <select class="select2 form-select mb-2" id="cash_pey_id" name="money_receiver">
+
+                  {% for tailor in tailors %}
+                  <option value="{{tailor.id}}">{{tailor.first_name}} {{tailor.last_name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="modalEditUserName">شرح</label>
+              <textarea name="dis" placeholder="شرح" class="form-control"></textarea>
+
+            </div>
+            <div class="col-12 text-center mt-4">
+              <button type="button" class="btn btn-label-secondary me-sm-3 me-1" data-bs-toggle="modal"
+                data-bs-target="#twoFactorAuth">
+                <i class="bx bx-left-arrow-alt bx-xs me-1 scaleX-n1-rtl"></i><span class="align-middle">بازگشت</span>
+              </button>
+              <button type="submit" class="btn btn-primary me-sm-3 me-1" id="CreateDepositBtn">ثبت</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Check Deposit -->
+  <div class="modal fade" id="twoFactorAuthTwo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-simple">
+      <div class="modal-content p-3 p-md-5">
+        <div class="modal-body">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-4 mt-0 mt-md-n2">
+            <h3 class="secondary-font">ثبت واریزی جدید</h3>
+          </div>
+          <form id="CreateDepositFormCheck" class="row g-3"
+            action="{% url 'instalment_app:DepositManageMent' costumer_obj.id %}">
+
+
+            {% csrf_token %}
+         
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="modalEditUserFirstName">مبلغ واریزی</label>
+              <input type="number" id="modalEditUserFirstName" required name="deposit_price" class="form-control"
+                placeholder="مبلغ واریزی">
+
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="flatpickr-date_4">تاریخ</label>
+              <input type="text" id="flatpickr-date_4" name="deposit_date" required class="form-control"
+                placeholder="تاریخ">
+            </div>
+            <input type="hidden" name="peyment_type" value="چک">
+            <div class="row g-2">
+              <div class="col mb-3">
+                <label for="nameBackdrop" class="form-label">صادر کننده</label>
+                <input type="text" id="nameBackdrop" class="form-control " name="owner" placeholder="صادر کننده">
+              </div>
+              <div class="col mb-3">
+                <label for="nameBackdrop" class="form-label">دریافت کننده</label>
+                <input type="text" id="nameBackdrop" class="form-control " name="check_recaiver"
+                  placeholder="دریافت  کننده">
+              </div>
+
+            </div>
+            <div class="row g-2">
+              <div class="col mb-0">
+                <label class="form-label" for="num_print">تاریخ سررسید</label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                      class='bx bx-window-open'></i></span>
+                  <input type="text" class="form-control" name="dead_time" placeholder="YYYY/MM/DD"
+                    id="flatpickr-date_6">
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-12">
+              <label class="form-label" for="modalEditUserName">شرح</label>
+              <textarea name="dis" placeholder="شرح" class="form-control"></textarea>
+
+            </div>
+          </form>
+          <div class="row g-2">
+            <div class="col mb-0">
+              <label for="emailBackdrop" class="form-label">تصویر چک</label>
+              <form action="{% url 'instalment_app:ImageChekPeyDeposit' %}" class="dropzone" enctype="multipart/form-data"
+                id="CheckImage">
+                {% csrf_token %}
+                <div class="dz-message needsclick">
+                  عکس را اینجا رها کنید
+                  <span class="note needsclick">(تصویر چک)</span>
+                </div>
+                <div class="fallback">
+                  <input name="file" type="file">
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-12 text-center mt-4">
+            <button type="button" class="btn btn-label-secondary me-sm-3 me-1" data-bs-toggle="modal"
+              data-bs-target="#twoFactorAuth">
+              <i class="bx bx-left-arrow-alt bx-xs me-1 scaleX-n1-rtl"></i><span class="align-middle">بازگشت</span>
+            </button>
+            <button type="button" class="btn btn-primary me-sm-3 me-1" onclick="CreateDepCheck()" id="CreateDepositBtnCheck">ثبت</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="modal fade" id="CreateDeposit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+      <div class="modal-content p-3 p-md-5">
+        <div class="modal-body">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-4 mt-0 mt-md-n2">
+            <h3 class="secondary-font">ثبت واریزی جدید</h3>
+          </div>
+          <form id="CreateDepositForm" class="row g-3"
+            action="{% url 'instalment_app:DepositManageMent' costumer_obj.id %}">
+
+
+            {% csrf_token %}
+         
+
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="modalEditUserFirstName">مبلغ واریزی</label>
+              <input type="number" id="modalEditUserFirstName" required name="deposit_price" class="form-control"
+                placeholder="مبلغ واریزی">
+
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="flatpickr-date">تاریخ</label>
+              <input type="text" id="flatpickr-date" name="deposit_date" required class="form-control"
+                placeholder="تاریخ">
+            </div>
+
+            <div class="row g-2">
+              <div class="col-md p-4">
+                <small class="text-light fw-semibold d-block">شیوه پرداخت</small>
+                <div class="form-check form-check-inline mt-3">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                  <label class="form-check-label" for="inlineRadio1">حساب ها</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="inlineRadioOptions" checked id="inlineRadio2"
+                    value="2">
+                  <label class="form-check-label" for="inlineRadio2">طرف حساب ها</label>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="row g-2">
+
+              <div class="col mb-0">
+                <label for="emailBackdrop" class="form-label" id="cash_pey_label_id">طرف حساب </label>
+                <select class="select2 form-select mb-2" id="cash_pey_id" name="money_receiver">
+
+                  {% for tailor in tailors %}
+                  <option value="{{tailor.id}}">{{tailor.first_name}} {{tailor.last_name}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="modalEditUserName">شرح</label>
+              <textarea name="dis" placeholder="شرح" class="form-control"></textarea>
+
+            </div>
+            <div class="col-12 text-center mt-4">
+              <button type="submit" class="btn btn-primary me-sm-3 me-1" id="CreateDepositBtn">ثبت</button>
+              <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                انصراف
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <br>
+  <div class="card">
+
+    <div class="card-header ">
+      <h5 style="float:right;"> باقیمانده حساب {{costumer_obj.firstname}} {{costumer_obj.lastname}} برابر است با (<span
+          id="total_pricee">{{costumer_obj.deposits.last.balance}}</span>تومان)</h5>
+
+      <button type="button" data-bs-toggle="modal" data-bs-target="#twoFactorAuth"
+        class="btn rounded-pill btn-secondary" style="float:left;">ایجاد مورد جدید <i
+          class='bx bx-user-plus bx-tada'></i></button>
+    </div>
+
+    <div class="card-datatable text-nowrap">
+      <table class="dt-scrollableTable table table-bordered">
+        <thead>
+          <tr>
+            <th>شناسه</th>
+            <th>تاریخ</th>
+            <th>شرح</th>
+            <th>بدهکار</th>
+
+            <th>بستانکار</th>
+
+            <th></th>
+
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <!--/ Layout Demo -->
+</div>
+
+
+{% for deposit in costumer_obj.deposits.all %}
+
+
+
+<div class="modal fade" id="EditDeposit_{{deposit.id}}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4 mt-0 mt-md-n2">
+          <h3 class="secondary-font">ویرایش واریزی </h3>
+        </div>
+        <form id="EditDepositForm_{{deposit.id}}" class="row g-3"
+          action="/InstallMent/DepositManageMent/{{deposit.id}}/{{costumer_obj.id}}">
+
+
+
+
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="modalEditUserEmail">شماره کارت مبدا</label>
+            <input type="text" id="modalEditUserLastName" value="{{deposit.card_number_origin}}"
+              name="card_number_origin" required class="form-control" placeholder="شماره کارت مبدا">
+          </div>
+          {% csrf_token %}
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="modalEditUserStatus">شماره کارت مقصد</label>
+            <input type="text" id="modalEditUserLastName" value="{{deposit.card_number_destination}}"
+              name="card_number_destinition" required class="form-control" placeholder="شماره کارت مقصد">
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="flatpickr-date_{{deposit.id}}">تاریخ</label>
+            <input type="text" id="flate-picker-edit" value="{{deposit.deposit_date}}" name="deposit_date" required
+              class="form-control" placeholder="تاریخ">
+          </div>
+
+
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="bedehkar_id">مبلغ</label>
+            <input type="text" id="bedehkar_id" value="{{deposit.check_state.value}}"
+              name="{{deposit.check_state.name}}" required class="form-control" placeholder="تاریخ">
+          </div>
+
+
+
+          <div class="col-12">
+            <label class="form-label" for="modalEditUserName">شرح</label>
+            <textarea name="dis" placeholder="شرح" class="form-control">{{deposit.dis}}</textarea>
+
+          </div>
+          <div class="col-12 text-center mt-4">
+            <button type="button" class="btn btn-primary me-sm-3 me-1" onclick="EditDeposit({{deposit.id}})"
+              id="EditDepositBtn_{{deposit.id}}">ثبت</button>
+            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+              انصراف
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock content %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/pickr/pickr-themes.css' %}">
+<link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+{% endblock css %}
+{% block page_js %}
+{% load static %}
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ProductiveJs/InstallMantManageMent/CostumerManageMent/DepositStatus.js' %}"></script>
+<!-- page js -->
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-pickers.js' %}"></script>
+<script src="{% static 'frest_temp/js/modal-two-factor-auth.js' %}"></script>
+{% endblock page_js %}
+{% block vendors %}
+{% load static %}
+<script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+
+
+<script src="{% static 'frest_temp/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jdate/jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/l10n/fa-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/pickr/pickr.js' %}"></script>
+{% endblock vendors %}

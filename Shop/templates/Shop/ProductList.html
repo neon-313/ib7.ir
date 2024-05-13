@@ -1,0 +1,839 @@
+{% extends 'ShopBaseNew.html' %}
+{% comment %} {% block css %}
+    <style>
+        /* Loader overlay */
+        .loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        z-index: 1000;
+        display: none;
+        }
+
+        /* Loading spinner */
+        .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -25px; /* Half of the loader height */
+        margin-left: -25px; /* Half of the loader width */
+        }
+
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
+
+    </style>
+{% endblock css %} {% endcomment %}
+{% block content %}
+
+{% load static %}
+<main class="flex-grow bg-secondary-light pb-14 pt-36 dark:bg-primary-dark xs:pt-36">
+    <div class="container relative">
+      <!-- Mobile Options Section -->
+      <div class="mb-6 flex items-center justify-center gap-x-4 md:hidden">
+        <!-- Filter -->
+        <button aria-controls="shop-filter-drawer-navigation"
+          class="flex w-full items-center gap-x-4 rounded-lg bg-primary-light px-4 py-3 text-sm text-quaternary-700 dark:bg-secondary-dark dark:text-primary-light xs:text-base"
+          data-drawer-show="shop-filter-drawer-navigation" data-drawer-placement="bottom"
+          data-drawer-target="shop-filter-drawer-navigation" type="button">
+          <svg class="h-6 w-6">
+            <use xlink:href="#filter" />
+          </svg>
+          <div>فیلتر</div>
+        </button>
+        <!-- Sort -->
+        <button aria-controls="shop-sort-drawer-navigation"
+          class="flex w-full items-center gap-x-4 rounded-lg bg-primary-light px-4 py-3 text-sm text-quaternary-700 dark:bg-secondary-dark dark:text-primary-light xs:text-base"
+          data-drawer-show="shop-sort-drawer-navigation" data-drawer-placement="bottom"
+          data-drawer-target="shop-sort-drawer-navigation" type="button">
+          <svg class="h-6 w-6">
+            <use xlink:href="#sort" />
+          </svg>
+          <div>مرتب سازی</div>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-12 grid-rows-[60px_min(500px,_1fr)] gap-4">
+        <!-- Desktop Filter Section -->
+        <div class="col-span-4 row-span-2 hidden md:block lg:col-span-3">
+          <div
+            class="sticky top-32 mb-4 overflow-hidden rounded-lg bg-primary-light shadow-base dark:bg-secondary-dark">
+            <div dir="ltr"
+              class="flex max-h-[calc(95vh_-_100px)] flex-col overflow-y-auto overflow-x-hidden px-4 py-3">
+              <div dir="rtl">
+                <!-- Title -->
+                <div class="mb-6 flex items-center justify-between">
+                  <h3 class="text-quaternary-700 dark:text-primary-light xl:text-lg">
+                    فیلتر ها
+                  </h3>
+                  <button class="btn-primary-nobg py-2 text-sm">
+                    حذف همه
+                  </button>
+                </div>
+                <ul class="space-y-6">
+                  <!-- Search -->
+                  <li>
+                    <label class="sr-only">Shop search</label>
+                    <input
+                      class="w-full rounded-lg border-none bg-secondary-light px-2 py-3 text-quaternary-600 outline-none placeholder:text-sm placeholder:text-quaternary-500 focus:ring-0 dark:bg-primary-dark dark:text-quaternary-300 placeholder:dark:text-quaternary-400"
+                      placeholder="جستجو در بین نتایج ..." type="text" />
+                  </li>
+                  <!-- Price -->
+                  <li>
+                    <div>
+                      <p class="mb-4 text-quaternary-700 dark:text-primary-light">
+                        محدوده قیمت
+                      </p>
+                      <div class="space-y-4">
+                        <div id="shop-price-slider"></div>
+                        <div class="flex items-center justify-between">
+                          <div class="text-tertiary-500 dark:text-tertiary-400">
+                            <span class="text-xs font-bold xl:text-sm" id="shop-price-slider-min">
+                            </span>
+                            <span class="text-xs">تومان</span>
+                          </div>
+                          <div class="text-tertiary-500 dark:text-tertiary-400">
+                            <span class="text-xs font-bold xl:text-sm" id="shop-price-slider-max">
+                            </span>
+                            <span class="text-xs">تومان</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- Categories -->
+                  <li>
+                    <details class="[&amp;_summary::-webkit-details-marker]:hidden group">
+                      <summary
+                        class="flex cursor-pointer items-center justify-between rounded-lg py-3 text-quaternary-700 dark:text-primary-light">
+                        <span> دسته بندی ها </span>
+                        <span class="shrink-0 transition duration-200 group-open:-rotate-90">
+                          <svg class="h-5 w-5">
+                            <use xlink:href="#chevron-left" />
+                          </svg>
+                        </span>
+                      </summary>
+                      <div class="mt-2 max-h-60 overflow-y-auto pl-1">
+                        <ul class="space-y-2 rounded-lg">
+                          <li>
+                            <a class="flex items-center gap-x-2 rounded-lg px-4 py-2 text-quaternary-700 dark:text-primary-light"
+                              href="#">
+                              <span> دسته بندی 1 </span>
+                              <svg class="h-5 w-5">
+                                <use xlink:href="#chevron-left" />
+                              </svg>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="flex items-center gap-x-2 rounded-lg px-4 py-2 text-quaternary-700 dark:text-primary-light"
+                              href="#">
+                              <span> دسته بندی 2 </span>
+                              <svg class="h-5 w-5">
+                                <use xlink:href="#chevron-left" />
+                              </svg>
+                            </a>
+                          </li>
+                          <li>
+                            <a class="flex items-center gap-x-2 rounded-lg px-4 py-2 text-quaternary-700 dark:text-primary-light"
+                              href="#">
+                              <span> دسته بندی 3 </span>
+                              <svg class="h-5 w-5">
+                                <use xlink:href="#chevron-left" />
+                              </svg>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </details>
+                  </li>
+                  <!-- brands -->
+                  <li>
+                    <details class="[&amp;_summary::-webkit-details-marker]:hidden group">
+                      <summary
+                        class="flex cursor-pointer items-center justify-between rounded-lg py-3 text-quaternary-700 dark:text-primary-light">
+                        <span> برند ها </span>
+                        <span class="shrink-0 transition duration-200 group-open:-rotate-90">
+                          <svg class="h-5 w-5">
+                            <use xlink:href="#chevron-left" />
+                          </svg>
+                        </span>
+                      </summary>
+                      <div class="mt-2 max-h-60 overflow-y-auto pl-1">
+                        <ul class="space-y-2 rounded-lg" id="brandListFilterDesktop">
+                          <li class="p-2">
+                            <label class="sr-only">Brand search</label>
+                            <input id="brandListFilterDesktopSearchInput"
+                              class="w-full rounded-lg border border-none bg-secondary-light px-2 py-3 text-quaternary-600 outline-none placeholder:text-sm placeholder:text-quaternary-500 focus:ring-0 dark:bg-primary-dark dark:text-quaternary-300 placeholder:dark:text-quaternary-400"
+                              placeholder="جستجوی برند ..." type="text" />
+                          </li>
+                          <li>
+                            <div class="flex w-full items-center gap-x-2 pr-4">
+                              <input id="brand-nike" type="checkbox" value=""
+                                class="h-4 w-4 cursor-pointer rounded-xl border-senary-300 bg-secondary-light dark:border-senary-600 dark:bg-quaternary-700" />
+                              <label for="brand-nike"
+                                class="flex w-full cursor-pointer items-center justify-between py-2 pl-4 font-medium text-quaternary-600 dark:text-quaternary-300">
+                                <span>نایک</span>
+                                <span>nike</span>
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="flex w-full items-center gap-x-2 pr-4">
+                              <input id="brand-adidas" type="checkbox" value=""
+                                class="h-4 w-4 cursor-pointer rounded-xl border-senary-300 bg-secondary-light dark:border-senary-600 dark:bg-quaternary-700" />
+                              <label for="brand-adidas"
+                                class="flex w-full cursor-pointer items-center justify-between py-2 pl-4 font-medium text-quaternary-600 dark:text-quaternary-300">
+                                <span>آدیداس</span>
+                                <span>adidas</span>
+                              </label>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </details>
+                  </li>
+                  <!-- colors -->
+                  <li>
+                    <details class="[&amp;_summary::-webkit-details-marker]:hidden group">
+                      <summary
+                        class="flex cursor-pointer items-center justify-between rounded-lg py-3 text-quaternary-700 dark:text-primary-light">
+                        <span> رنگ ها </span>
+                        <span class="shrink-0 transition duration-200 group-open:-rotate-90">
+                          <svg class="h-5 w-5">
+                            <use xlink:href="#chevron-left" />
+                          </svg>
+                        </span>
+                      </summary>
+                      <div class="mt-2 max-h-60 overflow-y-auto pl-1">
+                        <ul class="space-y-2 rounded-lg" id="colorListFilterDesktop">
+                          <li class="p-2">
+                            <label class="sr-only">Color search</label>
+                            <input id="colorListFilterDesktopSearchInput"
+                              class="w-full rounded-lg border border-none bg-secondary-light px-2 py-3 text-quaternary-600 outline-none placeholder:text-sm placeholder:text-quaternary-500 focus:ring-0 dark:bg-primary-dark dark:text-quaternary-300 placeholder:dark:text-quaternary-400"
+                              placeholder="جستجوی رنگ ..." type="text" />
+                          </li>
+                          <li>
+                            <div class="flex w-full items-center gap-x-2 pr-4">
+                              <input id="color-red" type="checkbox" value=""
+                                class="h-4 w-4 cursor-pointer rounded-xl border-senary-300 bg-secondary-light dark:border-senary-600 dark:bg-quaternary-700" />
+                              <label for="color-red"
+                                class="flex w-full cursor-pointer items-center justify-between py-2 pl-4 font-medium text-quaternary-600 dark:text-quaternary-300">
+                                <span>قرمز</span>
+                                <span class="h-4 w-4 rounded-full ring-2 ring-senary-200 dark:ring-quaternary-700"
+                                  style="background: red"></span>
+                              </label>
+                            </div>
+                          </li>
+                          <li>
+                            <div class="flex w-full items-center gap-x-2 pr-4">
+                              <input id="color-blue" type="checkbox" value=""
+                                class="h-4 w-4 cursor-pointer rounded-xl border-senary-300 bg-secondary-light dark:border-senary-600 dark:bg-quaternary-700" />
+                              <label for="color-blue"
+                                class="flex w-full cursor-pointer items-center justify-between py-2 pl-4 font-medium text-quaternary-600 dark:text-quaternary-300">
+                                <span>آبی</span>
+                                <span class="h-4 w-4 rounded-full ring-2 ring-senary-200 dark:ring-quaternary-700"
+                                  style="background: blue"></span>
+                              </label>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </details>
+                  </li>
+                  <!-- Available -->
+                  <li>
+                    <label class="flex cursor-pointer items-center justify-between py-3" for="onlyAvailableDesktop">
+                      <div class="text-quaternary-700 dark:text-primary-light">
+                        فقط کالا های موجود
+                      </div>
+                      <div class="relative inline-flex cursor-pointer items-center">
+                        <input class="peer sr-only" id="onlyAvailableDesktop" type="checkbox" />
+
+                        <div
+                          class="peer h-6 w-11 rounded-full bg-senary-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-primary-light after:transition-all after:content-[''] peer-checked:bg-tertiary-500 peer-checked:after:translate-x-full peer-focus:ring-tertiary-500 dark:bg-quaternary-800 after:dark:bg-secondary-dark peer-checked:dark:bg-tertiary-400 peer-focus:dark:ring-tertiary-400">
+                        </div>
+                      </div>
+                    </label>
+                  </li>
+                  <!-- Special -->
+                  <li>
+                    <label class="flex cursor-pointer items-center justify-between py-3" for="onlySpecialDesktop">
+                      <div class="text-quaternary-700 dark:text-primary-light">
+                        فقط محصولات ویژه
+                      </div>
+                      <div class="relative inline-flex cursor-pointer items-center">
+                        <input class="peer sr-only" id="onlySpecialDesktop" type="checkbox" />
+
+                        <div
+                          class="peer h-6 w-11 rounded-full bg-senary-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-primary-light after:transition-all after:content-[''] peer-checked:bg-tertiary-500 peer-checked:after:translate-x-full peer-focus:ring-tertiary-500 dark:bg-quaternary-800 after:dark:bg-secondary-dark peer-checked:dark:bg-tertiary-400 peer-focus:dark:ring-tertiary-400">
+                        </div>
+                      </div>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 space-y-4 md:col-span-8 lg:col-span-9">
+          <!-- Desktop Sort Section -->
+          <div class="hidden md:block">
+            <div
+              class="flex h-14 items-center gap-x-2 rounded-lg bg-primary-light px-2 text-quaternary-600 shadow-base dark:bg-secondary-dark dark:text-quaternary-300 lg:px-4">
+              <!-- Title -->
+              <div class="flex items-center gap-x-2 text-sm lg:text-base">
+                <svg class="h-6 w-6">
+                  <use xlink:href="#sort" />
+                </svg>
+                <p>مرتب سازی بر اساس</p>
+              </div>
+              <!-- Sort Buttons -->
+              <button
+                class="sort-button-active rounded-lg px-1 py-2 text-sm hover:bg-secondary-light hover:dark:bg-primary-dark lg:px-4">
+                جدید ترین
+              </button>
+              <button
+                class="rounded-lg px-1 py-2 text-sm hover:bg-secondary-light hover:dark:bg-primary-dark lg:px-4">
+                پرفروش ترین
+              </button>
+              <button
+                class="rounded-lg px-1 py-2 text-sm hover:bg-secondary-light hover:dark:bg-primary-dark lg:px-4">
+                گران ترین
+              </button>
+              <button
+                class="rounded-lg px-1 py-2 text-sm hover:bg-secondary-light hover:dark:bg-primary-dark lg:px-4">
+                ارزان ترین
+              </button>
+            </div>
+          </div>
+
+          <!-- Products Grid -->
+          <div
+            class="grid grid-cols-2 gap-px gap-y-2 xs:gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <!-- loading Product Card -->
+
+            <div class="animate-pulse rounded-xl bg-primary-light dark:bg-secondary-dark"></div>
+
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Product Card -->
+            <div
+              class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base">
+              <div class="relative rounded-xl bg-primary-light p-2 shadow-base dark:bg-secondary-dark md:p-5">
+                <!-- image -->
+                <div class="mb-2 md:mb-5" draggable="false">
+                  <a href="./product-detail.html">
+                    <img alt="" class="mx-auto w-32 rounded-lg md:w-auto" src="./assets/images/products/p8.png" />
+                  </a>
+                </div>
+                <!-- title -->
+                <div class="mb-1">
+                  <a class="line-clamp-2 h-10 text-sm text-quaternary-700 dark:text-primary-light md:h-12 md:text-base"
+                    href="./product-detail.html">
+                    کیف دوشی زنانه درسا مدل 49787
+                  </a>
+                </div>
+                <!-- Prices -->
+                <div class="flex flex-col">
+                  <!-- Old price -->
+                  <div class="h-5 text-left">
+                    <del
+                      class="text-xs text-quaternary-500 decoration-red-600 dark:text-quaternary-400 dark:decoration-red-500 xs:text-sm md:text-base">
+                      10,000,000
+                    </del>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p
+                        class="w-7 rounded-full bg-red-500 py-px text-center text-xs text-primary-light dark:bg-red-500 xs:w-9 xs:text-sm">
+                        60%
+                      </p>
+                    </div>
+                    <!-- New price -->
+                    <div class="text-xs font-bold text-tertiary-500 dark:text-tertiary-400 xs:text-sm md:text-base">
+                      400,000,000
+                      <span class="text-xs font-light md:text-sm">تومان</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Pagination -->
+          <div class="flex items-center justify-center gap-x-4 md:justify-end">
+            <!-- Previous page-->
+            <a class="pagination-button flex items-center justify-center" href="#">
+              <svg class="h-6 w-6">
+                <use xlink:href="#chevron-right"></use>
+              </svg>
+            </a>
+
+            <!-- Pages -->
+            <div class="flex items-center gap-x-2">
+              <a class="pagination-button pagination-button-active" href="#">
+                1
+              </a>
+              <p class="text-sm text-quaternary-500 dark:text-quaternary-400">
+                ...
+              </p>
+
+              <a class="pagination-button" href="#"> 3 </a>
+              <a class="pagination-button" href="#"> 4 </a>
+
+              <p class="text-sm text-quaternary-500 dark:text-quaternary-400">
+                ...
+              </p>
+
+              <a class="pagination-button" href="#"> 10 </a>
+            </div>
+            <!-- Next page-->
+            <a class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-light text-quaternary-700 transition-all duration-200 hover:bg-tertiary-500 hover:text-primary-light dark:bg-secondary-dark dark:text-primary-light hover:dark:bg-tertiary-600"
+              href="#">
+              <svg class="h-6 w-6">
+                <use xlink:href="#chevron-left"></use>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock content %}
+
+
+{% block page_js %}
+
+
+<script src="{% static 'shop_temp/ShopJs/ProductList.js' %}"></script>
+
+{% endblock page_js %}

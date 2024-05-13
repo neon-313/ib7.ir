@@ -1,0 +1,134 @@
+{% extends 'Ib7Base.html' %}
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <!-- Layout Demo -->
+  <br>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style2 mb-0">
+      <li class="breadcrumb-item">
+        <a href="javascript:void(0);">خانه</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="javascript:void(0);">جسنجو صورت حساب ها</a>
+      </li>
+
+    </ol>
+  </nav>
+  <br>
+
+
+
+  <div class="card">
+
+    <div class="card-header ">
+      <!-- <h5 style="float:right;">لیست کاربران</h5> -->
+      <div class="row">
+        <div class="col-6">
+          <div class="input-group input-group-merge">
+            <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-window-open'></i></span>
+            <input type="text" class="form-control" name="serch_word" placeholder="YYYY/MM/DD" id="flatpickr-date">
+          </div>
+        </div>
+        <div class="col-3">
+          <button class="btn rounded-pill btn-secondary" data-bs-toggle="modal" data-bs-target="#CreateUser"
+          style="float:right;" onclick="SerchPeyment()" id="serch_btn">جستجو<i class='bx bx-search-alt bx-tada' ></i></button>
+        </div>
+        </div>
+    </div>
+
+
+    
+    <div class="table-responsive text-nowrap">
+      <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>تاریخ پرداخت</th>
+              <th> مبلغ قسط</th>
+              <th>نام مشتری</th>
+              <th>وضعیت</th>
+              <th>شماره تلفن</th>
+              <th>قیمت صورت حساب</th>
+              <th>کد صورت حساب</th>
+     
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0" id="result_table">
+
+          </tbody>
+        </table>
+      </div>
+  
+  </div>
+  <!--/ Layout Demo -->
+</div>
+
+
+
+
+{% endblock content %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}">
+<link rel="stylesheet"
+  href="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/animate-css/animate.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/tagify/tagify.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/pickr/pickr-themes.css' %}">
+{% endblock css %}
+{% block page_js %}
+{% load static %}
+<!-- begin page js -->
+<script src="{% static 'frest_temp/ProductiveJs/SerchFactorManageMemt/SerchFactor.js' %}"></script>
+<!-- page js -->
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/i18n/defaults-fa_IR.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bloodhound/bloodhound.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-pickers.js' %}"></script>
+{% endblock page_js %}
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/datatables/i18n/fa.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive/datatables.responsive.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedcolumns/datatables.fixedcolumns.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select/datatables-select.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-select-bs5/select.bootstrap5.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jdate/jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/l10n/fa-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/pickr/pickr.js' %}"></script>
+{% endblock vendors %}

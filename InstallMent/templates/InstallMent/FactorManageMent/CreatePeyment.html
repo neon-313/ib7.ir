@@ -1,0 +1,185 @@
+{% extends 'Ib7Base.html' %}
+
+
+{% block content %}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+  <input type="hidden" id="factormanagement" value="{% url 'instalment_app:FactorManageMent' %}">
+  <br>
+  <nav aria-label="breadcrumb" >
+      <ol class="breadcrumb breadcrumb-style2 mb-0">
+        <li class="breadcrumb-item">
+          <a href="javascript:void(0);">خانه</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'instalment_app:FactorList' %}">لیست صورت حساب ها</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="javascript:void(0);">ثبت صورت حساب جدید</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="javascript:void(0);">ثبت تاریخ اقساط</a>
+        </li>
+   
+      </ol>
+    </nav>
+    <br>
+
+    <div class="row">
+     
+
+      
+      <div class="col-12">
+        <div class="card mb-4">
+          <h5 class="card-header">  ثبت تاریخ اقساط سفارش {{factor_obj.order_code}} </h5>
+          <div class="card-body">
+            <div class="row">
+                <form  id="CreatePeymentDateForm" action="{% url 'instalment_app:CreatePeymentData' %}" >
+                  {% csrf_token %}
+                    {% for peyment in peyment_objs %}
+                    <div class="mb-3">
+                      <label class="form-label" for="basic-default-fullname">مبلغ : {{peyment.price}} تومان</label>
+                      <input type="text" class="form-control" name="prepayment_date_{{peyment.id}}" placeholder="YYYY/MM/DD" id="flatpickr-date_{{peyment.count}}" required>
+                      <input type="hidden" name="peyment_id" value="{{peyment.id}}">
+                    </div>
+                    {% endfor %}
+               
+                    <div class="pt-4">
+                      <button type="submit" class="btn btn-primary me-sm-3 me-1" id="CreatePeymentDateBtn" >ثبت</button>
+                      
+                    </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+{% comment %} 
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#backDropModal">
+      نمایش مودال
+    </button> {% endcomment %}
+    
+                            <!-- Modal -->
+                            <div class="modal fade" id="backDropModal" data-bs-backdrop="static" tabindex="-1">
+                              <div class="modal-dialog">
+                                <form class="modal-content" id="CreateTimeFactorForm" action="{% url 'instalment_app:CreateTimeOrder' %}">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="backDropModalTitle"  >قیمت نهایی این سفارش </h5>
+                                    
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="row" id="SummeryForm">
+                                      <div class="col mb-3">
+                                        <label for="nameBackdrop" class="form-label">مقدار تخفیف</label>
+                                        <input type="text" id="nameBackdrop" class="form-control" name="discount" placeholder="مقدار تخفیف">
+                                      </div>
+                                      <div class="col mb-3">
+                                        <label for="nameBackdrop" class="form-label">تعداد اقساط</label>
+                                        <input type="number" id="nameBackdrop" class="form-control" name="number_of_peyments" placeholder="تعداد">
+                                      </div>
+                                    </div>
+                                    {% csrf_token %}
+                                    <div class="row g-2">
+                                      <div class="col mb-0">
+                                        <label for="emailBackdrop" class="form-label">مقدار پیش پرداخت</label>
+                                        <input type="text" id="emailBackdrop" name="prepayment" class="form-control" placeholder="مقدار پیش پرداخت">
+                                      </div>
+                                      <div class="col mb-0">
+                                        <label class="form-label" for="num_print">تاریخ پرداخت پیش پرداخت </label>
+                                        <div class="input-group input-group-merge">
+                                          <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-window-open'></i></span>
+                                          <input type="text" class="form-control" name="prepayment_date" placeholder="YYYY/MM/DD" id="flatpickr-date">
+                                        </div>
+                                      </div>
+                                    </div>
+                          
+                                  </div>
+                                  <div class="modal-footer">
+                                
+                                    <button type="button" id="CreateTimeFactorBtn" class="btn btn-primary">ذخیره</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+      <!-- /Autosize -->
+
+      <!-- Input Mask -->
+
+      <!-- /Input Mask -->
+
+      <!-- Bootstrap Maxlength -->
+      <!-- /Bootstrap Maxlength -->
+
+      <!-- Form Repeater -->
+
+      <!-- /Form Repeater -->
+    </div>
+  </div>
+{% endblock content %}
+
+
+{% block vendors %}
+{% load static %}
+<script src="{% static 'frest_temp/vendor/libs/autosize/autosize.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-repeater/jquery-repeater.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jdate/jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/flatpickr/l10n/fa-jdate.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/pickr/pickr.js' %}"></script>
+{% endblock vendors %}
+{% block page_js %}
+{% load static %}
+
+
+
+<script src="{% static 'frest_temp/ProductiveJs/InstallMantManageMent/FactorManageMent/CreatePeyment.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-extras.js' %}"></script>
+<script src="{% static 'frest_temp/js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-file-upload.js' %}"></script>
+<script src="{% static 'frest_temp/js/ui-modals.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-selects.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-tagify.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-typeahead.js' %}"></script>
+<script src="{% static 'frest_temp/js/forms-pickers.js' %}"></script>
+
+
+{% endblock page_js %}
+{% block css %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/sweetalert2/sweetalert2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/select2/select2.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-select/bootstrap-select.css' %}">
+
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/typeahead-js/typeahead.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/flatpickr/flatpickr.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/jquery-timepicker/jquery-timepicker.css' %}">
+<link rel="stylesheet" href="{% static 'frest_temp/vendor/libs/pickr/pickr-themes.css' %}">
+{% endblock css %}
+
+
+
+
+
+
+
+
+
+
